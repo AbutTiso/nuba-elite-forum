@@ -1,0 +1,45 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ title }} — Nuba Elite Forum{% endblock %}
+
+{% block content %}
+
+<section class='relative pt-32 pb-20 bg-[#062B57] overflow-hidden'>
+    <div class='absolute inset-0 opacity-10'>
+        <svg viewBox='0 0 1440 320' class='w-full'>
+            <path fill='#C8A24C' d='M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,138.7C672,128,768,160,864,181.3C960,203,1056,213,1152,197.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'></path>
+        </svg>
+    </div>
+    <div class='relative max-w-4xl mx-auto px-4 text-center'>
+        <div class='w-20 h-20 bg-[#C8A24C]/20 rounded-2xl flex items-center justify-center mx-auto mb-6 backdrop-blur-sm border border-[#C8A24C]/30'>
+            <svg class='w-10 h-10 text-[#C8A24C]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z'/>
+            </svg>
+        </div>
+        <h1 class='text-4xl md:text-5xl font-extrabold text-white mb-4' style='font-family: Montserrat, sans-serif;'>{{ title }}</h1>
+        <div class='w-20 h-0.5 bg-gradient-to-r from-transparent via-[#C8A24C] to-transparent mx-auto'></div>
+    </div>
+</section>
+
+<section class='py-32 bg-white'>
+    <div class='max-w-2xl mx-auto px-4 text-center'>
+        <div class='w-20 h-20 bg-[#F9F9F7] rounded-full flex items-center justify-center mx-auto mb-8'>
+            <svg class='w-10 h-10 text-[#062B57]/20' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M12 6v6m0 0v6m0-6h6m-6 0H6'/>
+            </svg>
+        </div>
+        <h2 class='text-2xl font-bold text-[#062B57] mb-4'>Coming Soon</h2>
+        <p class='text-gray-500 leading-relaxed mb-8'>
+            We're working on something impactful. This section will feature rich content about {{ title|lower }} at Nuba Elite Forum.
+        </p>
+        <a href='{% url 'core:home' %}' class='inline-flex items-center px-6 py-3 bg-[#062B57] text-white font-semibold rounded-full border-2 border-[#C8A24C] hover:bg-[#C8A24C] transition-all duration-300 text-sm'>
+            <svg class='mr-2 w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10 19l-7-7m0 0l7-7m-7 7h18'/>
+            </svg>
+            Return to Homepage
+        </a>
+    </div>
+</section>
+
+{% endblock %}

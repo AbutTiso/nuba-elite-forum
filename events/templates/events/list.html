@@ -1,0 +1,97 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Events & Forums — Nuba Elite Forum{% endblock %}
+
+{% block content %}
+
+<section class='relative pt-24 pb-16 bg-[#062B57] overflow-hidden'>
+    <div class='absolute inset-0 opacity-[0.04]'>
+        <div class='absolute inset-0' style='background-image: radial-gradient(circle at 20px 20px, #C8A24C 1px, transparent 0); background-size: 40px 40px;'></div>
+    </div>
+    <div class='relative max-w-4xl mx-auto px-4 text-center'>
+        <span class='inline-block text-[#C8A24C] font-semibold text-xs uppercase tracking-[0.2em] bg-[#C8A24C]/10 px-3 py-1 rounded-full mb-4'>Engage</span>
+        <h1 class='text-4xl md:text-5xl font-extrabold text-white mb-4' style='font-family: Montserrat, sans-serif;'>Events & Forums</h1>
+        <div class='w-20 h-0.5 bg-gradient-to-r from-transparent via-[#C8A24C] to-transparent mx-auto'></div>
+        <p class='text-white/60 mt-4 max-w-xl mx-auto'>Conferences, webinars, youth programs, and community dialogues.</p>
+    </div>
+</section>
+
+<section class='py-16 lg:py-24 bg-white'>
+    <div class='max-w-6xl mx-auto px-4'>
+        
+        {% if upcoming_events %}
+        <h2 class='text-2xl font-extrabold text-[#062B57] mb-8' style='font-family: Montserrat, sans-serif;'>Upcoming Events</h2>
+        <div class='grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16'>
+            {% for event in upcoming_events %}
+            <div class='bg-[#F9F9F7] rounded-2xl overflow-hidden border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300'>
+                <div class='bg-[#062B57] px-5 py-3 flex items-center justify-between'>
+                    <span class='text-[#C8A24C] text-xs font-semibold uppercase tracking-wider'>{{ event.get_event_type_display }}</span>
+                    {% if event.is_virtual %}
+                    <span class='text-white/50 text-xs'>Virtual</span>
+                    {% endif %}
+                </div>
+                <div class='p-6'>
+                    <h3 class='text-[#062B57] font-bold text-lg mb-2'>{{ event.title }}</h3>
+                    <p class='text-gray-500 text-sm leading-relaxed mb-4'>{{ event.short_description }}</p>
+                    
+                    <div class='flex items-center gap-2 text-gray-400 text-xs mb-3'>
+                        <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'/>
+                        </svg>
+                        <span>{{ event.event_date|date:'F d, Y — H:i' }}</span>
+                    </div>
+                    
+                    {% if event.venue %}
+                    <div class='flex items-center gap-2 text-gray-400 text-xs mb-4'>
+                        <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z'/>
+                            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 11a3 3 0 11-6 0 3 3 0 016 0z'/>
+                        </svg>
+                        <span>{{ event.venue }}</span>
+                    </div>
+                    {% endif %}
+                    
+                    {% if event.registration_link %}
+                    <a href='{{ event.registration_link }}' target='_blank' class='inline-block px-5 py-2 bg-[#C8A24C] text-[#062B57] font-bold rounded-full text-sm hover:bg-[#062B57] hover:text-white transition-all'>
+                        Register Now
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% if past_events %}
+        <h2 class='text-2xl font-extrabold text-[#062B57] mb-8' style='font-family: Montserrat, sans-serif;'>Past Events</h2>
+        <div class='grid md:grid-cols-2 lg:grid-cols-3 gap-8'>
+            {% for event in past_events %}
+            <div class='bg-gray-50 rounded-2xl overflow-hidden border border-gray-100 opacity-75 hover:opacity-100 transition-opacity'>
+                <div class='px-5 py-3 bg-gray-200'>
+                    <span class='text-gray-500 text-xs font-semibold uppercase'>{{ event.get_event_type_display }}</span>
+                </div>
+                <div class='p-6'>
+                    <h3 class='text-gray-600 font-bold text-lg mb-2'>{{ event.title }}</h3>
+                    <p class='text-gray-400 text-xs'>{{ event.event_date|date:'F d, Y' }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% if not upcoming_events and not past_events %}
+        <div class='text-center py-20'>
+            <div class='w-20 h-20 bg-[#F9F9F7] rounded-full flex items-center justify-center mx-auto mb-6'>
+                <svg class='w-10 h-10 text-[#062B57]/20' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                    <path stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'/>
+                </svg>
+            </div>
+            <h2 class='text-2xl font-bold text-[#062B57] mb-2'>No Events Yet</h2>
+            <p class='text-gray-500'>Check back soon for upcoming forums, webinars, and community dialogues.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

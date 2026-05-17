@@ -1,0 +1,113 @@
+﻿{% extends 'base.html' %}
+{% block title %}Contact Us - Nuba Elite Forum{% endblock %}
+
+{% block content %}
+
+<section class='relative pt-32 pb-20 bg-[#062B57] overflow-hidden'>
+    <div class='absolute inset-0 opacity-10'>
+        <svg viewBox='0 0 1440 320' class='w-full'>
+            <path fill='#C8A24C' d='M0,160L48,176C96,192,192,224,288,213.3C384,203,480,149,576,138.7C672,128,768,160,864,181.3C960,203,1056,213,1152,197.3C1248,181,1344,139,1392,117.3L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'></path>
+        </svg>
+    </div>
+    <div class='relative max-w-4xl mx-auto px-4 text-center'>
+        <span class='text-[#C8A24C] font-semibold text-sm uppercase tracking-wider'>Get In Touch</span>
+        <h1 class='text-5xl font-extrabold text-white mt-4 mb-6'>Contact Us</h1>
+        <div class='w-24 h-1 bg-[#C8A24C] mx-auto'></div>
+    </div>
+</section>
+
+<section class='py-20 bg-white'>
+    <div class='max-w-6xl mx-auto px-4'>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class='bg-green-50 border border-green-200 text-green-700 px-6 py-4 rounded-xl mb-8 text-center'>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <div class='grid md:grid-cols-3 gap-12'>
+            
+            <!-- Contact Info -->
+            <div class='space-y-6'>
+                <div class='bg-[#062B57] text-white p-6 rounded-xl'>
+                    <h3 class='text-[#C8A24C] font-semibold mb-2'>Email</h3>
+                    <p class='text-white/80'>info@nubaforum.org</p>
+                </div>
+                <div class='bg-[#F9F9F7] p-6 rounded-xl border border-gray-100'>
+                    <h3 class='text-[#062B57] font-semibold mb-2'>Location</h3>
+                    <p class='text-gray-500'>Nuba Mountains, Sudan</p>
+                </div>
+                <div class='bg-[#F9F9F7] p-6 rounded-xl border border-gray-100'>
+                    <h3 class='text-[#062B57] font-semibold mb-2'>Follow Us</h3>
+                    <div class='flex space-x-3 mt-3'>
+                        <a href='#' class='w-10 h-10 bg-[#062B57] rounded-full flex items-center justify-center text-white hover:bg-[#C8A24C] transition-colors'>f</a>
+                        <a href='#' class='w-10 h-10 bg-[#062B57] rounded-full flex items-center justify-center text-white hover:bg-[#C8A24C] transition-colors'>𝕏</a>
+                        <a href='#' class='w-10 h-10 bg-[#062B57] rounded-full flex items-center justify-center text-white hover:bg-[#C8A24C] transition-colors'>in</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Contact Form -->
+            <div class='md:col-span-2 bg-[#F9F9F7] p-8 rounded-2xl border border-gray-100'>
+                <h2 class='text-2xl font-bold text-[#062B57] mb-6'>Send Us a Message</h2>
+                
+                <form method='post' class='space-y-4'>
+                    {% csrf_token %}
+                    <input type='hidden' name='contact_submit' value='1'>
+                    
+                    <div class='grid md:grid-cols-2 gap-4'>
+                        <div>
+                            <label class='block text-sm font-medium text-[#062B57] mb-1'>Name *</label>
+                            {{ contact_form.name }}
+                        </div>
+                        <div>
+                            <label class='block text-sm font-medium text-[#062B57] mb-1'>Email *</label>
+                            {{ contact_form.email }}
+                        </div>
+                    </div>
+                    <div>
+                        <label class='block text-sm font-medium text-[#062B57] mb-1'>Subject *</label>
+                        {{ contact_form.subject }}
+                    </div>
+                    <div>
+                        <label class='block text-sm font-medium text-[#062B57] mb-1'>Organization</label>
+                        {{ contact_form.organization }}
+                    </div>
+                    <div>
+                        <label class='block text-sm font-medium text-[#062B57] mb-1'>Message *</label>
+                        {{ contact_form.message }}
+                    </div>
+                    <button type='submit' class='px-8 py-4 bg-[#062B57] text-white font-bold rounded-full border-2 border-[#C8A24C] hover:bg-[#C8A24C] transition-all duration-300'>
+                        Send Message
+                        <svg class='inline ml-2 w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 19l9 2-9-18-9 18 9-2zm0 0v-8'/>
+                        </svg>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block extra_head %}
+<style>
+    form input, form select, form textarea {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.75rem;
+        font-size: 0.95rem;
+        transition: border-color 0.3s;
+        background: white;
+    }
+    form input:focus, form select:focus, form textarea:focus {
+        outline: none;
+        border-color: #C8A24C;
+        box-shadow: 0 0 0 3px rgba(200, 162, 76, 0.1);
+    }
+</style>
+{% endblock %}

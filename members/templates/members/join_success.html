@@ -1,0 +1,19 @@
+﻿{% extends 'base.html' %}
+{% block title %}Application Submitted - NEF{% endblock %}
+{% block content %}
+<section class='min-h-screen pt-32 pb-20 bg-[#F9F9F7] flex items-center'>
+    <div class='max-w-2xl mx-auto px-4 text-center'>
+        <div class='w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6'>
+            <svg class='w-12 h-12 text-green-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 13l4 4L19 7'/>
+            </svg>
+        </div>
+        <h1 class='text-4xl font-extrabold text-[#062B57] mb-4'>Application Submitted!</h1>
+        <div class='w-24 h-1 bg-[#C8A24C] mx-auto mb-6'></div>
+        <p class='text-gray-600 text-lg mb-8'>Thank you for applying to join Nuba Elite Forum. Your application is under review and we will get back to you soon.</p>
+        <a href='{% url 'core:home' %}' class='inline-flex items-center px-8 py-4 bg-[#062B57] text-white font-bold rounded-full border-2 border-[#C8A24C] hover:bg-[#C8A24C] transition-all duration-300'>
+            Return to Homepage
+        </a>
+    </div>
+</section>
+{% endblock %}

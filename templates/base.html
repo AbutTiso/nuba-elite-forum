@@ -1,0 +1,86 @@
+﻿{% load static %}<!DOCTYPE html>
+<html lang='{% if request.COOKIES.site_lang == 'ar' %}ar{% else %}en{% endif %}' class='scroll-smooth' dir='{% if request.COOKIES.site_lang == 'ar' %}rtl{% else %}ltr{% endif %}'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    
+    <meta name='description' content='{% block meta_description %}Nuba Elite Forum (NEF) — Uniting Voices. Empowering Communities. Building a New, Inclusive Sudan through dialogue, leadership, and collective action.{% endblock %}'>
+    <meta name='keywords' content='Nuba Elite Forum, NEF, Nuba Mountains, Sudan, community development, peacebuilding, youth empowerment, leadership, dialogue, unity, equality, progress'>
+    <meta name='author' content='Nuba Elite Forum'>
+    <meta name='robots' content='index, follow'>
+    
+    <meta property='og:type' content='website'>
+    <meta property='og:title' content='{% block og_title %}Nuba Elite Forum (NEF) — Uniting Voices, Empowering Communities{% endblock %}'>
+    <meta property='og:description' content='{% block og_description %}A professional platform uniting intellectuals, professionals, youth, and change-makers for dialogue, development, and collective impact.{% endblock %}'>
+    <meta property='og:image' content='{% block og_image %}{% static 'images/logo/nef-og-image.png' %}{% endblock %}'>
+    <meta property='og:url' content='{{ request.build_absolute_uri }}'>
+    <meta property='og:site_name' content='Nuba Elite Forum'>
+    
+    <meta name='twitter:card' content='summary_large_image'>
+    <meta name='twitter:title' content='{% block twitter_title %}Nuba Elite Forum (NEF){% endblock %}'>
+    <meta name='twitter:description' content='{% block twitter_description %}Uniting Voices. Empowering Communities. Building a New, Inclusive Sudan.{% endblock %}'>
+    <meta name='twitter:image' content='{% block twitter_image %}{% static 'images/logo/nef-og-image.png' %}{% endblock %}'>
+    
+    <link rel='canonical' href='{{ request.build_absolute_uri }}'>
+    <link rel='icon' type='image/svg+xml' href='{% static 'images/logo/nef-favicon.svg' %}'>
+    <link rel='apple-touch-icon' href='{% static 'images/logo/nef-apple-touch.png' %}'>
+    
+    <meta name='theme-color' content='#062B57'>
+    <meta name='msapplication-TileColor' content='#062B57'>
+    
+    <title>{% block title %}Nuba Elite Forum (NEF) — Uniting Voices, Empowering Communities{% endblock %}</title>
+    
+    <link rel='preconnect' href='https://fonts.googleapis.com'>
+    <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+    <link href='https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Montserrat:wght@600;700;800;900&display=swap' rel='stylesheet'>
+    
+    <script src='https://cdn.tailwindcss.com'></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'nef-navy': '#062B57',
+                        'nef-gold': '#C8A24C',
+                        'nef-cream': '#F9F9F7',
+                    },
+                    fontFamily: {
+                        'sans': ['Inter', 'sans-serif'],
+                        'heading': ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <link rel='stylesheet' href='{% static 'css/main.css' %}'>
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body class='bg-[#F9F9F7] text-[#111111] font-sans antialiased'>
+
+    <a href='#main-content' class='sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-[#062B57] focus:text-white focus:rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C8A24C]'>
+        Skip to main content
+    </a>
+    
+    {% include 'partials/_navbar.html' %}
+    
+    <main id='main-content' class='min-h-screen'>
+        {% block content %}{% endblock %}
+    </main>
+    
+    {% include 'partials/_footer.html' %}
+    
+    <button id='back-to-top' 
+            onclick='window.scrollTo({top: 0, behavior: \"smooth\"})'
+            class='fixed bottom-6 right-6 z-50 w-12 h-12 bg-[#062B57] text-white rounded-full shadow-lg border-2 border-[#C8A24C] flex items-center justify-center opacity-0 invisible transition-all duration-300 hover:bg-[#C8A24C] hover:scale-110'
+            aria-label='Back to top'>
+        <svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M5 15l7-7 7 7'/>
+        </svg>
+    </button>
+    
+    <script src='{% static 'js/main.js' %}'></script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

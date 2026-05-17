@@ -1,0 +1,73 @@
+﻿{% load static %}
+<nav class='fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300 bg-white/95 backdrop-blur-md border-b border-gray-100' id='navbar'>
+    <div class='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
+        <div class='flex justify-between items-center h-16 md:h-20'>
+            
+            <div class='flex-shrink-0'>
+                <a href='/' class='flex items-center space-x-3'>
+                    <div class='w-10 h-10 bg-[#062B57] rounded-xl flex items-center justify-center shadow-lg'>
+                        <span class='text-[#C8A24C] font-extrabold text-lg'>NEF</span>
+                    </div>
+                    <div class='hidden md:block'>
+                        <div class='text-[#062B57] font-bold text-sm leading-tight'>NUBA ELITE</div>
+                        <div class='text-[#C8A24C] text-[10px] font-semibold tracking-[0.2em]'>FORUM</div>
+                    </div>
+                </a>
+            </div>
+            
+            <div class='hidden lg:flex lg:items-center lg:space-x-1'>
+                <a href='/' class='text-[#062B57] hover:text-[#C8A24C] font-medium transition-colors px-3 py-2 text-sm rounded-lg hover:bg-[#062B57]/5'>Home</a>
+                <a href='/about/' class='text-[#062B57] hover:text-[#C8A24C] font-medium transition-colors px-3 py-2 text-sm rounded-lg hover:bg-[#062B57]/5'>About</a>
+                <a href='/focus-areas/' class='text-[#062B57] hover:text-[#C8A24C] font-medium transition-colors px-3 py-2 text-sm rounded-lg hover:bg-[#062B57]/5'>Focus Areas</a>
+                <a href='/articles/' class='text-[#062B57] hover:text-[#C8A24C] font-medium transition-colors px-3 py-2 text-sm rounded-lg hover:bg-[#062B57]/5'>Insights</a>
+                <a href='/events/' class='text-[#062B57] hover:text-[#C8A24C] font-medium transition-colors px-3 py-2 text-sm rounded-lg hover:bg-[#062B57]/5'>Events</a>
+                <a href='/gallery/' class='text-[#062B57] hover:text-[#C8A24C] font-medium transition-colors px-3 py-2 text-sm rounded-lg hover:bg-[#062B57]/5'>Gallery</a>
+                <a href='/contact/' class='text-[#062B57] hover:text-[#C8A24C] font-medium transition-colors px-3 py-2 text-sm rounded-lg hover:bg-[#062B57]/5'>Contact</a>
+                
+                <button onclick='toggleDarkMode()' class='p-2 rounded-lg hover:bg-[#062B57]/5 transition-colors' title='Toggle dark mode'>
+                    <svg id='dark-icon' class='w-4 h-4 text-[#062B57]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                        <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z'/>
+                    </svg>
+                </button>
+                
+               <!-- <div class='flex items-center gap-0.5 ml-1 border-l border-gray-200 pl-3'>
+                    <a href='/?lang=en' class='text-[10px] px-2 py-1 rounded-full font-bold transition-colors bg-[#062B57] text-white' id='lang-en'>EN</a>
+                    <a href='/?lang=ar' class='text-[10px] px-2 py-1 rounded-full font-bold transition-colors text-[#062B57] hover:bg-[#062B57]/5' id='lang-ar'>عربي</a>
+                </div>-->
+                
+                <a href='/members/join/' class='ml-2 bg-[#062B57] text-white px-5 py-2 rounded-full font-semibold text-sm border-2 border-[#C8A24C] hover:bg-[#C8A24C] hover:text-[#062B57] transition-all duration-300 shadow-md hover:shadow-lg'>
+                    Join NEF
+                </a>
+            </div>
+            
+            <div class='lg:hidden'>
+                <button onclick='toggleMobileMenu()' class='text-[#062B57] p-2 hover:bg-[#062B57]/5 rounded-lg transition-colors'>
+                    <svg class='h-6 w-6' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
+                        <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 6h16M4 12h16M4 18h16'/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <div id='mobile-menu' class='hidden lg:hidden border-t border-gray-100 py-2'>
+            <a href='/' class='block text-[#062B57] hover:text-[#C8A24C] hover:bg-[#062B57]/5 font-medium py-3 px-4 rounded-lg transition-colors'>Home</a>
+            <a href='/about/' class='block text-[#062B57] hover:text-[#C8A24C] hover:bg-[#062B57]/5 font-medium py-3 px-4 rounded-lg transition-colors'>About</a>
+            <a href='/focus-areas/' class='block text-[#062B57] hover:text-[#C8A24C] hover:bg-[#062B57]/5 font-medium py-3 px-4 rounded-lg transition-colors'>Focus Areas</a>
+            <a href='/articles/' class='block text-[#062B57] hover:text-[#C8A24C] hover:bg-[#062B57]/5 font-medium py-3 px-4 rounded-lg transition-colors'>Insights</a>
+            <a href='/events/' class='block text-[#062B57] hover:text-[#C8A24C] hover:bg-[#062B57]/5 font-medium py-3 px-4 rounded-lg transition-colors'>Events</a>
+            <a href='/gallery/' class='block text-[#062B57] hover:text-[#C8A24C] hover:bg-[#062B57]/5 font-medium py-3 px-4 rounded-lg transition-colors'>Gallery</a>
+            <a href='/contact/' class='block text-[#062B57] hover:text-[#C8A24C] hover:bg-[#062B57]/5 font-medium py-3 px-4 rounded-lg transition-colors'>Contact</a>
+            
+            <div class='flex items-center gap-2 px-4 py-3'>
+                <button onclick='toggleDarkMode()' class='text-sm text-[#062B57] font-medium'>Dark Mode</button>
+                <span class='text-gray-300'>|</span>
+                <a href='/?lang=en' class='text-xs px-3 py-1 rounded-full font-bold bg-[#062B57] text-white'>EN</a>
+                <a href='/?lang=ar' class='text-xs px-3 py-1 rounded-full font-bold text-[#062B57] border border-[#062B57]/20'>عربي</a>
+            </div>
+            
+            <a href='/members/join/' class='block mx-4 mt-2 text-center bg-[#062B57] text-white px-6 py-3 rounded-full font-semibold border-2 border-[#C8A24C] hover:bg-[#C8A24C] hover:text-[#062B57] transition-all'>
+                Join NEF
+            </a>
+        </div>
+    </div>
+</nav>
