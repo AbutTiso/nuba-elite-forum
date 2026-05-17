@@ -1,11 +1,10 @@
 ﻿from django.contrib import admin
-from django.utils.html import format_html
 from django.utils import timezone
 from .models import Event
 
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['title', 'event_type', 'event_date', 'status_badge', 'is_featured', 'created_at']
+    list_display = ['title', 'event_type', 'event_date', 'is_featured', 'created_at']
     list_filter = ['event_type', 'is_featured', 'is_virtual', 'event_date']
     search_fields = ['title', 'description', 'venue']
     prepopulated_fields = {'slug': ('title',)}
@@ -26,16 +25,6 @@ class EventAdmin(admin.ModelAdmin):
         }),
     )
     actions = ['mark_featured', 'unmark_featured']
-    
-    def status_badge(self, obj):
-        if obj.event_date > timezone.now():
-            return format_html(
-                '<span style="background:#00A651;color:white;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;">Upcoming</span>'
-            )
-        return format_html(
-            '<span style="background:#6B7280;color:white;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;">Past</span>'
-        )
-    status_badge.short_description = 'Status'
     
     def mark_featured(self, request, queryset):
         updated = queryset.update(is_featured=True)

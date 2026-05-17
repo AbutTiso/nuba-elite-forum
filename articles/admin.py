@@ -1,21 +1,15 @@
 ﻿from django.contrib import admin
-from django.utils.html import format_html
 from .models import Article, Category
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ['name', 'slug', 'article_count']
+    list_display = ['name', 'slug']
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ['name']
-    
-    def article_count(self, obj):
-        count = obj.articles.filter(status='published').count()
-        return format_html('<strong>{}</strong>', count)
-    article_count.short_description = 'Published Articles'
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
-    list_display = ['title', 'category', 'author', 'status_badge', 'featured_badge', 'published_at', 'created_at']
+    list_display = ['title', 'category', 'author', 'status', 'featured', 'published_at', 'created_at']
     list_filter = ['status', 'category', 'featured', 'created_at', 'published_at']
     search_fields = ['title', 'content', 'author', 'excerpt']
     prepopulated_fields = {'slug': ('title',)}
@@ -37,24 +31,6 @@ class ArticleAdmin(admin.ModelAdmin):
         }),
     )
     actions = ['publish_articles', 'unpublish_articles', 'mark_featured', 'unmark_featured']
-    
-    def status_badge(self, obj):
-        if obj.status == 'published':
-            return format_html(
-                '<span style="background:#00A651;color:white;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;">Published</span>'
-            )
-        return format_html(
-            '<span style="background:#F59E0B;color:white;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:600;">Draft</span>'
-        )
-    status_badge.short_description = 'Status'
-    
-    def featured_badge(self, obj):
-        if obj.featured:
-            return format_html(
-                '<span style="color:#C8A24C;font-size:14px;">&#9733;</span>'
-            )
-        return '-'
-    featured_badge.short_description = 'Featured'
     
     def publish_articles(self, request, queryset):
         from django.utils import timezone

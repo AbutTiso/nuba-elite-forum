@@ -1,11 +1,9 @@
 ﻿from django.contrib import admin
-from django.utils.html import format_html
-from django.urls import reverse
 from .models import Member
 
 @admin.register(Member)
 class MemberAdmin(admin.ModelAdmin):
-    list_display = ['full_name', 'email', 'membership_type', 'country', 'status_badge', 'application_date']
+    list_display = ['full_name', 'email', 'membership_type', 'country', 'is_approved', 'application_date']
     list_filter = ['membership_type', 'country', 'is_approved', 'application_date']
     search_fields = ['full_name', 'email', 'profession', 'organization', 'country', 'city']
     readonly_fields = ['application_date']
@@ -24,16 +22,6 @@ class MemberAdmin(admin.ModelAdmin):
         }),
     )
     actions = ['approve_members', 'suspend_members', 'reject_members']
-    
-    def status_badge(self, obj):
-        if obj.is_approved:
-            return format_html(
-                '<span style="background:#00A651;color:white;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;">Approved</span>'
-            )
-        return format_html(
-            '<span style="background:#D72638;color:white;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:600;">Pending</span>'
-        )
-    status_badge.short_description = 'Status'
     
     def approve_members(self, request, queryset):
         updated = queryset.update(is_approved=True)
