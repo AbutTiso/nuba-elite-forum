@@ -57,7 +57,7 @@
             </div>
             <div class='text-gray-600 leading-relaxed text-[15px]'>{{ thread.content|linebreaks }}</div>
             
-            <div class='mt-4 pt-4 border-t border-gray-100 flex items-center gap-4'>
+            <div class='mt-4 pt-4 border-t border-gray-100 flex items-center gap-4 flex-wrap'>
                 {% if user.is_authenticated %}
                 <button class='like-thread-btn flex items-center gap-1.5 text-sm text-gray-400 hover:text-[#C8A24C] transition-colors' data-slug='{{ thread.slug }}'>
                     <svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'/></svg>
@@ -65,6 +65,10 @@
                 </button>
                 {% if thread.author != user %}
                 <a href='/messages/new/{{ thread.author.username }}/' class='text-sm text-[#C8A24C] hover:text-[#062B57] transition-colors'>Message</a>
+                {% endif %}
+                {% if thread.author == user %}
+                <a href='/forum/thread/{{ thread.slug }}/edit/' class='text-sm text-gray-400 hover:text-[#C8A24C] transition-colors'>Edit</a>
+                <a href='/forum/thread/{{ thread.slug }}/delete/' class='text-sm text-red-400 hover:text-red-600 transition-colors'>Delete</a>
                 {% endif %}
                 {% else %}
                 <span class='text-sm text-gray-400'>{{ thread.likes.count }} like{{ thread.likes.count|pluralize }}</span>
@@ -88,6 +92,10 @@
                             {{ post.author.username }}
                             {% if user.is_authenticated and post.author != user %}
                             <a href='/messages/new/{{ post.author.username }}/' class='text-[10px] text-[#C8A24C] hover:text-[#062B57] ml-2'>Message</a>
+                            {% endif %}
+                            {% if post.author == user %}
+                            <a href='/forum/post/{{ post.id }}/edit/' class='text-[10px] text-gray-400 hover:text-[#C8A24C] ml-2'>Edit</a>
+                            <a href='/forum/post/{{ post.id }}/delete/' class='text-[10px] text-red-400 hover:text-red-600 ml-1' onclick='return confirm(\"Delete this reply?\")'>Delete</a>
                             {% endif %}
                         </p>
                         <p class='text-gray-400 text-xs'>{{ post.created_at|date:'M d, Y - H:i' }}{% if post.is_edited %} <span class='text-[#C8A24C]'>(edited)</span>{% endif %}</p>

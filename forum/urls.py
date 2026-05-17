@@ -11,4 +11,8 @@ urlpatterns = [
     path('thread/<slug:slug>/reply/', views.reply_thread, name='reply'),
     path('thread/<slug:slug>/like/', views.like_thread, name='like_thread'),
     path('post/<int:post_id>/like/', views.like_post, name='like_post'),
+    path('thread/<slug:slug>/edit/', views.edit_thread, name='edit_thread'),
+    path('thread/<slug:slug>/delete/', views.delete_thread, name='delete_thread'),
+    path('post/<int:post_id>/edit/', views.edit_post, name='edit_post'),
+    path('post/<int:post_id>/delete/', views.delete_post, name='delete_post'),
 ]

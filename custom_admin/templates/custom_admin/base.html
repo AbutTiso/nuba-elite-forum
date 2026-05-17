@@ -1,0 +1,137 @@
+﻿{% load static %}<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>{% block title %}NEF Admin{% endblock %}</title>
+    <link href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@700;800;900&display=swap' rel='stylesheet'>
+    <script src='https://cdn.tailwindcss.com'></script>
+    <script>tailwind.config={theme:{extend:{colors:{'nef-navy':'#062B57','nef-gold':'#C8A24C','nef-cream':'#F9F9F7'},fontFamily:{'sans':['Inter','sans-serif'],'heading':['Montserrat','sans-serif']}}}}</script>
+    <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+    <style>
+        body{font-family:'Inter',sans-serif;background:#F9F9F7;}
+        .sidebar-link{transition:all 0.2s;display:flex;align-items:center;gap:12px;padding:11px 16px;border-radius:12px;color:rgba(255,255,255,0.6);font-size:13px;font-weight:500;text-decoration:none;}
+        .sidebar-link:hover,.sidebar-link.active{background:rgba(200,162,76,0.15);color:#C8A24C;font-weight:600;}
+        .sidebar-link svg{width:20px;height:20px;flex-shrink:0;opacity:0.7;}
+        .sidebar-link:hover svg,.sidebar-link.active svg{opacity:1;}
+        .stat-card{transition:all 0.25s;cursor:pointer;text-decoration:none;display:block;}
+        .stat-card:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(6,43,87,0.1);}
+        .btn-primary{background:#062B57;color:white;border:2px solid #C8A24C;border-radius:999px;padding:10px 22px;font-weight:700;font-size:13px;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;text-decoration:none;cursor:pointer;}
+        .btn-primary:hover{background:#C8A24C;color:#062B57;transform:translateY(-1px);box-shadow:0 8px 20px rgba(200,162,76,0.3);}
+        .btn-secondary{background:white;color:#062B57;border:2px solid #E5E7EB;border-radius:999px;padding:10px 22px;font-weight:600;font-size:13px;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;text-decoration:none;cursor:pointer;}
+        .btn-secondary:hover{background:#F9F9F7;border-color:#062B57;}
+        .badge{padding:4px 10px;border-radius:20px;font-size:10px;font-weight:600;white-space:nowrap;}
+        .badge-approved{background:#D1FAE5;color:#065F46;}
+        .badge-pending{background:#FEF3C7;color:#92400E;}
+        .badge-admin{background:rgba(200,162,76,0.15);color:#C8A24C;}
+        .table-row{transition:background 0.15s;}
+        .table-row:hover{background:#F9FAFB;}
+        .scrollable{scrollbar-width:thin;scrollbar-color:#E5E7EB transparent;}
+        .scrollable::-webkit-scrollbar{width:4px;}
+        .scrollable::-webkit-scrollbar-track{background:transparent;}
+        .scrollable::-webkit-scrollbar-thumb{background:#E5E7EB;border-radius:4px;}
+        @media(max-width:768px){
+            .sidebar{transform:translateX(-100%);position:fixed;z-index:50;height:100vh;transition:transform 0.3s;}
+            .sidebar.open{transform:translateX(0);}
+        }
+    </style>
+</head>
+<body class='bg-[#F9F9F7] min-h-screen flex'>
+
+    <!-- Mobile Menu Button -->
+    <button onclick='toggleSidebar()' class='md:hidden fixed top-4 left-4 z-50 bg-[#062B57] text-white p-2.5 rounded-xl shadow-lg'>
+        <svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 6h16M4 12h16M4 18h16'/></svg>
+    </button>
+
+    <!-- Sidebar -->
+    <aside id='sidebar' class='sidebar w-64 bg-[#062B57] text-white min-h-screen flex-shrink-0 md:relative md:translate-x-0 flex flex-col'>
+        <div class='p-5 border-b border-white/10'>
+            <a href='/manage/' class='flex items-center gap-3'>
+                <img src='{% static 'images/logo/nef-logo.png' %}' alt='NEF' class='h-9 w-auto' onerror='this.style.display=\"none\"'>
+                <div>
+                    <div class='font-extrabold text-sm' style='font-family:Montserrat,sans-serif;'>Admin Panel</div>
+                    <div class='text-[#C8A24C] text-[9px] tracking-[0.2em]'>MANAGEMENT</div>
+                </div>
+            </a>
+        </div>
+        <div class='text-[9px] text-white/20 uppercase tracking-[0.2em] px-5 pt-5 pb-2'>Main Menu</div>
+        <nav class='px-3 space-y-0.5 flex-1'>
+            <a href='/manage/' class='sidebar-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}'><svg fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'/></svg>Dashboard</a>
+            <a href='/manage/members/' class='sidebar-link {% if 'members' in request.path %}active{% endif %}'><svg fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z'/></svg>Members</a>
+            <a href='/manage/articles/' class='sidebar-link {% if 'articles' in request.path %}active{% endif %}'><svg fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z'/></svg>Articles</a>
+            <a href='/manage/events/' class='sidebar-link {% if 'events' in request.path %}active{% endif %}'><svg fill='none' stroke='currentColor' viewBox='0 0 24 24'><rect x='3' y='4' width='18' height='18' rx='2' ry='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg>Events</a>
+            <a href='/manage/messages/' class='sidebar-link {% if 'messages' in request.path %}active{% endif %}'><svg fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'/></svg>Messages</a>
+            <a href='/manage/subscribers/' class='sidebar-link {% if 'subscribers' in request.path %}active{% endif %}'><svg fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 00-5-5.917V4a1 1 0 10-2 0v1.083A6 6 0 006 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9'/></svg>Subscribers</a>
+        </nav>
+        <div class='text-[9px] text-white/20 uppercase tracking-[0.2em] px-5 pt-3 pb-2'>Quick Links</div>
+        <nav class='px-3 pb-4 space-y-0.5'>
+            <a href='/' target='_blank' class='sidebar-link'><svg fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'/></svg>View Website</a>
+            <a href='/accounts/logout/' class='sidebar-link !text-red-400 hover:!text-red-300'><svg fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1'/></svg>Logout</a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class='flex-1 min-h-screen flex flex-col'>
+        <!-- Header -->
+        <header class='bg-gradient-to-r from-[#062B57] to-[#0A3D7A] text-white px-6 py-3.5 flex items-center justify-between flex-wrap gap-3 shadow-lg'>
+            <div class='flex items-center gap-4'>
+                <div class='w-9 h-9 bg-[#C8A24C] rounded-xl flex items-center justify-center text-[#062B57] font-extrabold text-sm'>NEF</div>
+                <div>
+                    <h2 class='text-base font-extrabold' style='font-family:Montserrat,sans-serif;'>{% block header %}Admin Panel{% endblock %}</h2>
+                    <p class='text-[#C8A24C] text-[10px] tracking-wider'>UNITY &bull; EQUALITY &bull; PROGRESS</p>
+                </div>
+            </div>
+            <div class='flex items-center gap-4'>
+                <span class='text-white/40 text-xs hidden sm:inline'>{{ user.email }}</span>
+                <div class='flex items-center gap-2 bg-white/10 rounded-full px-3 py-1.5'>
+                    <div class='w-7 h-7 bg-[#C8A24C] rounded-full flex items-center justify-center text-[#062B57] font-bold text-xs'>{{ user.username.0|upper }}</div>
+                    <span class='text-sm font-semibold hidden sm:inline'>{{ user.username }}</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Content -->
+        <div class='flex-1 p-4 md:p-6'>
+            {% if messages %}
+                {% for message in messages %}
+                    <div class='mb-4 px-4 py-3 rounded-xl text-sm font-medium border flex items-center gap-2 {% if message.tags == 'success' %}bg-green-50 text-green-700 border-green-200{% else %}bg-blue-50 text-blue-700 border-blue-200{% endif %}'>
+                        <span>{% if message.tags == 'success' %}✅{% else %}ℹ️{% endif %}</span> {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% block content %}{% endblock %}
+        </div>
+
+        <!-- Footer -->
+        <footer class='bg-[#062B57] text-white px-6 py-4'>
+            <div class='flex flex-col md:flex-row items-center justify-between gap-2'>
+                <div class='flex items-center gap-2'>
+                    <span class='text-[#C8A24C] font-extrabold text-sm'>NEF</span>
+                    <span class='text-white/20 text-xs'>Admin Panel</span>
+                </div>
+                <p class='text-white/20 text-xs text-center'>&copy; 2026 Nuba Elite Forum &bull; Unity &bull; Equality &bull; Progress &bull; Peace</p>
+                <div class='flex items-center gap-4 text-white/20 text-xs'>
+                    <a href='/' class='hover:text-[#C8A24C] transition-colors'>Website</a>
+                    <a href='/accounts/logout/' class='hover:text-red-400 transition-colors'>Logout</a>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Overlay for mobile sidebar -->
+    <div id='sidebar-overlay' class='fixed inset-0 bg-black/50 z-40 hidden' onclick='toggleSidebar()'></div>
+    
+    <script>
+    function toggleSidebar(){
+        var sidebar=document.getElementById('sidebar');
+        var overlay=document.getElementById('sidebar-overlay');
+        sidebar.classList.toggle('open');
+        if(sidebar.classList.contains('open')){
+            overlay.classList.remove('hidden');
+        }else{
+            overlay.classList.add('hidden');
+        }
+    }
+    </script>
+</body>
+</html>

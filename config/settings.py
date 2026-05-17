@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'dashboard',
     'forum',
     'messages_app', 
+    'tinymce',
+    'custom_admin',
 ]
 
 MIDDLEWARE = [
@@ -147,3 +149,14 @@ AUTHENTICATION_BACKENDS = [
 
 # Email backend for development (prints to console instead of sending)
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+# TinyMCE Configuration
+TINYMCE_DEFAULT_CONFIG = {
+    'height': 400,
+    'width': '100%',
+    'menubar': True,
+    'plugins': 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount',
+    'toolbar': 'undo redo | formatselect | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | link image media | code | help',
+    'content_css': 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap',
+    'font_formats': 'Inter=Inter,sans-serif;',
+}

@@ -1,0 +1,122 @@
+﻿{% extends 'custom_admin/base.html' %}
+{% block title %}Dashboard | NEF Admin{% endblock %}
+{% block header %}Dashboard Overview{% endblock %}
+{% block content %}
+
+<!-- Welcome + Stats Row -->
+<div class='grid lg:grid-cols-3 gap-4 mb-6'>
+    <div class='bg-gradient-to-r from-[#062B57] to-[#0F3D6B] text-white rounded-2xl p-5 relative overflow-hidden shadow-lg lg:col-span-1'>
+        <div class='absolute top-0 right-0 w-32 h-32 bg-[#C8A24C]/5 rounded-full -translate-y-8 translate-x-8'></div>
+        <div class='relative z-10'>
+            <h2 class='text-lg font-extrabold mb-1' style='font-family:Montserrat,sans-serif;'>Welcome, {{ user.username }}</h2>
+            <p class='text-white/50 text-xs'>{{ total_members }} members &bull; {{ published_articles }} articles &bull; {{ total_threads|default:0 }} discussions</p>
+        </div>
+    </div>
+    <div class='lg:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-3'>
+        <a href='/manage/members/' class='stat-card bg-white rounded-2xl p-3.5 border border-gray-100 relative overflow-hidden flex items-center gap-3'>
+            <div class='absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-400 to-blue-600'></div>
+            <div class='w-9 h-9 bg-blue-50 rounded-lg flex items-center justify-center flex-shrink-0'><svg class='w-4 h-4 text-blue-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z'/></svg></div>
+            <div><div class='text-xl font-black text-[#062B57]'>{{ total_members }}</div><div class='text-[9px] text-gray-400 uppercase tracking-wider font-semibold'>Members</div></div>
+        </a>
+        <a href='/manage/members/' class='stat-card bg-white rounded-2xl p-3.5 border border-gray-100 relative overflow-hidden flex items-center gap-3'>
+            <div class='absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-amber-400 to-orange-500'></div>
+            <div class='w-9 h-9 bg-amber-50 rounded-lg flex items-center justify-center flex-shrink-0'><svg class='w-4 h-4 text-amber-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z'/></svg></div>
+            <div><div class='text-xl font-black text-[#D97706]'>{{ pending_members }}</div><div class='text-[9px] text-gray-400 uppercase tracking-wider font-semibold'>Pending</div></div>
+        </a>
+        <a href='/manage/articles/' class='stat-card bg-white rounded-2xl p-3.5 border border-gray-100 relative overflow-hidden flex items-center gap-3'>
+            <div class='absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-emerald-400 to-green-600'></div>
+            <div class='w-9 h-9 bg-emerald-50 rounded-lg flex items-center justify-center flex-shrink-0'><svg class='w-4 h-4 text-emerald-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z'/></svg></div>
+            <div><div class='text-xl font-black text-[#059669]'>{{ published_articles }}</div><div class='text-[9px] text-gray-400 uppercase tracking-wider font-semibold'>Articles</div></div>
+        </a>
+        <a href='/manage/messages/' class='stat-card bg-white rounded-2xl p-3.5 border border-gray-100 relative overflow-hidden flex items-center gap-3'>
+            <div class='absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-red-400 to-rose-500'></div>
+            <div class='w-9 h-9 bg-red-50 rounded-lg flex items-center justify-center flex-shrink-0'><svg class='w-4 h-4 text-red-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'/></svg></div>
+            <div><div class='text-xl font-black text-[#DC2626]'>{{ unread_messages }}</div><div class='text-[9px] text-gray-400 uppercase tracking-wider font-semibold'>Messages</div></div>
+        </a>
+    </div>
+</div>
+
+<!-- Management Cards -->
+<div class='grid md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6'>
+    <div class='bg-white rounded-2xl border border-gray-100 p-4 shadow-sm'>
+        <h4 class='font-bold text-sm text-[#062B57] mb-1'>👥 Member Management</h4>
+        <p class='text-xs text-gray-500 mb-3'>Approve, suspend, or manage member accounts</p>
+        <div class='flex flex-wrap gap-2'>
+            <a href='/manage/members/' class='text-xs px-3 py-1.5 bg-[#062B57] text-white rounded-lg font-semibold hover:bg-[#0A3D7A] transition-colors'>View All</a>
+            <a href='/manage/members/?status=pending' class='text-xs px-3 py-1.5 bg-amber-50 text-amber-700 rounded-lg font-semibold hover:bg-amber-100 transition-colors'>Pending ({{ pending_members }})</a>
+        </div>
+    </div>
+    <div class='bg-white rounded-2xl border border-gray-100 p-4 shadow-sm'>
+        <h4 class='font-bold text-sm text-[#062B57] mb-1'>📝 Content Management</h4>
+        <p class='text-xs text-gray-500 mb-3'>Create and manage articles and events</p>
+        <div class='flex flex-wrap gap-2'>
+            <a href='/manage/articles/create/' class='text-xs px-3 py-1.5 bg-[#062B57] text-white rounded-lg font-semibold hover:bg-[#0A3D7A] transition-colors'>+ Article</a>
+            <a href='/manage/events/create/' class='text-xs px-3 py-1.5 bg-[#062B57] text-white rounded-lg font-semibold hover:bg-[#0A3D7A] transition-colors'>+ Event</a>
+            <a href='/manage/articles/' class='text-xs px-3 py-1.5 bg-[#F9F9F7] text-[#062B57] rounded-lg font-semibold hover:bg-gray-100 transition-colors'>View All</a>
+        </div>
+    </div>
+    <div class='bg-white rounded-2xl border border-gray-100 p-4 shadow-sm'>
+        <h4 class='font-bold text-sm text-[#062B57] mb-1'>📧 Communication</h4>
+        <p class='text-xs text-gray-500 mb-3'>Messages and newsletter subscribers</p>
+        <div class='flex flex-wrap gap-2'>
+            <a href='/manage/messages/' class='text-xs px-3 py-1.5 bg-[#062B57] text-white rounded-lg font-semibold hover:bg-[#0A3D7A] transition-colors'>Messages{% if unread_messages > 0 %} ({{ unread_messages }}){% endif %}</a>
+            <a href='/manage/subscribers/' class='text-xs px-3 py-1.5 bg-[#F9F9F7] text-[#062B57] rounded-lg font-semibold hover:bg-gray-100 transition-colors'>Subscribers</a>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions + Charts Row -->
+<div class='grid lg:grid-cols-3 gap-4 mb-6'>
+    <div class='bg-white rounded-2xl border border-gray-100 p-4 shadow-sm'>
+        <h3 class='font-bold text-xs text-[#062B57] mb-3 uppercase tracking-wider'>Quick Actions</h3>
+        <div class='space-y-2'>
+            <a href='/manage/articles/create/' class='btn-primary w-full justify-center text-xs py-2.5'><svg class='w-3.5 h-3.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M12 5v14m-7-7h14'/></svg>New Article</a>
+            <a href='/manage/events/create/' class='btn-secondary w-full justify-center text-xs py-2.5'><svg class='w-3.5 h-3.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M12 5v14m-7-7h14'/></svg>New Event</a>
+            <a href='/manage/members/' class='btn-secondary w-full justify-center text-xs py-2.5'>Review Members</a>
+            <a href='/' target='_blank' class='btn-secondary w-full justify-center text-xs py-2.5'>View Website</a>
+        </div>
+    </div>
+    <div class='lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4'>
+        <div class='bg-white rounded-2xl border border-gray-100 p-4 shadow-sm'>
+            <h3 class='font-bold text-xs text-[#062B57] mb-2'>Members Growth</h3>
+            <div style='position:relative;height:180px;'><canvas id='membersChart'></canvas></div>
+        </div>
+        <div class='bg-white rounded-2xl border border-gray-100 p-4 shadow-sm'>
+            <h3 class='font-bold text-xs text-[#062B57] mb-2'>Content Overview</h3>
+            <div style='position:relative;height:180px;'><canvas id='contentChart'></canvas></div>
+        </div>
+    </div>
+</div>
+
+<!-- Activity Row -->
+<div class='grid md:grid-cols-2 gap-4'>
+    <div class='bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden'>
+        <div class='flex items-center justify-between px-4 py-3 border-b border-gray-100'><h3 class='font-bold text-xs text-[#062B57]'>Recent Members</h3><a href='/manage/members/' class='text-[10px] text-[#C8A24C] font-semibold hover:text-[#062B57]'>View All &rarr;</a></div>
+        <div class='divide-y divide-gray-50 max-h-[200px] overflow-y-auto scrollable'>
+            {% if recent_members %}
+                {% for member in recent_members %}
+                <a href='/manage/members/' class='flex items-center justify-between px-4 py-2.5 hover:bg-gray-50 transition-colors cursor-pointer block'>
+                    <div class='flex items-center gap-2.5'><div class='w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold {% if member.is_approved %}bg-emerald-100 text-emerald-700{% else %}bg-amber-100 text-amber-700{% endif %}'>{{ member.full_name.0|default:'?' }}</div><div><p class='text-xs font-semibold text-[#062B57]'>{{ member.full_name }}</p><p class='text-[10px] text-gray-400'>{{ member.country }}</p></div></div>
+                    <span class='badge {% if member.is_approved %}badge-approved{% else %}badge-pending{% endif %}'>{% if member.is_approved %}Approved{% else %}Pending{% endif %}</span>
+                </a>
+                {% endfor %}
+            {% else %}<div class='px-4 py-10 text-center text-gray-400'><p class='text-xs'>No members yet</p></div>{% endif %}
+        </div>
+    </div>
+    <div class='bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden'>
+        <div class='flex items-center justify-between px-4 py-3 border-b border-gray-100'><h3 class='font-bold text-xs text-[#062B57]'>Recent Messages</h3><a href='/manage/messages/' class='text-[10px] text-[#C8A24C] font-semibold hover:text-[#062B57]'>View All &rarr;</a></div>
+        <div class='divide-y divide-gray-50 max-h-[200px] overflow-y-auto scrollable'>
+            {% if recent_messages %}
+                {% for msg in recent_messages %}
+                <a href='/manage/messages/' class='block px-4 py-2.5 hover:bg-gray-50 transition-colors cursor-pointer'><div class='flex justify-between mb-0.5'><p class='text-xs font-semibold text-[#062B57]'>{{ msg.name }}</p><span class='text-[9px] text-gray-400'>{{ msg.created_at|date:'M d' }}</span></div><p class='text-[11px] text-gray-500 truncate'>{{ msg.subject|truncatechars:45 }}</p></a>
+                {% endfor %}
+            {% else %}<div class='px-4 py-10 text-center text-gray-400'><p class='text-xs'>No messages yet</p></div>{% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+new Chart(document.getElementById('membersChart'),{type:'line',data:{labels:JSON.parse('{{ monthly_labels|safe|default:"[]" }}'),datasets:[{data:JSON.parse('{{ monthly_counts_json|safe|default:"[]" }}'),borderColor:'#C8A24C',backgroundColor:'rgba(200,162,76,0.08)',fill:true,tension:0.4,borderWidth:2,pointRadius:0,pointHitRadius:10}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,grid:{color:'#F3F4F6'},ticks:{font:{size:9}}},x:{grid:{display:false},ticks:{font:{size:9}}}}}});
+new Chart(document.getElementById('contentChart'),{type:'doughnut',data:{labels:['Articles','Threads','Replies','Events'],datasets:[{data:[{{ published_articles }},{{ total_threads|default:0 }},{{ total_posts|default:0 }},{{ upcoming_events }}],backgroundColor:['#062B57','#C8A24C','#0A3D7A','#D4AF37'],borderWidth:0}]},options:{responsive:true,maintainAspectRatio:true,plugins:{legend:{position:'bottom',labels:{padding:12,usePointStyle:true,pointStyleWidth:8,font:{size:9}}}}}});
+</script>
+{% endblock %}

@@ -54,13 +54,9 @@ def notifications(request):
         return JsonResponse({'status': 'ok'})
     
     data = [{
-        'id': n.id,
-        'message': n.message,
-        'link': n.link,
-        'is_read': n.is_read,
-        'created': n.created_at.strftime('%b %d, %Y'),
+        'id': n.id, 'message': n.message, 'link': n.link,
+        'is_read': n.is_read, 'created': n.created_at.strftime('%b %d, %Y'),
     } for n in notifs]
-    
     return JsonResponse({'notifications': data, 'unread': unread})
 
 @login_required
@@ -76,7 +72,6 @@ def profile(request):
         user.last_name = request.POST.get('last_name', '')
         user.email = request.POST.get('email', '')
         user.save()
-        
         if member:
             member.full_name = request.POST.get('full_name', member.full_name)
             member.phone = request.POST.get('phone', member.phone)
@@ -86,7 +81,6 @@ def profile(request):
             member.organization = request.POST.get('organization', member.organization)
             member.bio = request.POST.get('bio', member.bio)
             member.save()
-        
         messages.success(request, 'Profile updated!')
         return redirect('dashboard:profile')
     
@@ -96,7 +90,7 @@ def profile(request):
 @login_required
 def my_threads(request):
     my_threads = Thread.objects.filter(author=request.user).order_by('-created_at')
-    all_threads = Thread.objects.all().order_by('-created_at')[:10]
+    all_threads = Thread.objects.all().order_by('-created_at')
     context = {
         'my_threads': my_threads,
         'all_threads': all_threads,
@@ -107,7 +101,7 @@ def my_threads(request):
 @login_required
 def my_posts(request):
     my_posts = Post.objects.filter(author=request.user).order_by('-created_at')
-    all_posts = Post.objects.all().order_by('-created_at')[:10]
+    all_posts = Post.objects.all().order_by('-created_at')
     context = {
         'my_posts': my_posts,
         'all_posts': all_posts,

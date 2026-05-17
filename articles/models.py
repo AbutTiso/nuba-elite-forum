@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils import timezone
-from django.urls import reverse
+from tinymce.models import HTMLField
 from django.contrib.auth.models import User
 
 class Category(models.Model):
@@ -25,7 +25,7 @@ class Article(models.Model):
     slug = models.SlugField(unique=True, max_length=250)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='articles')
     author = models.CharField(max_length=100, default='NEF Editorial')
-    content = models.TextField()
+    content = HTMLField()
     excerpt = models.TextField(max_length=500)
     image = models.ImageField(upload_to='articles/', blank=True, null=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='draft')
@@ -39,9 +39,6 @@ class Article(models.Model):
     
     def __str__(self):
         return self.title
-    
-    def get_absolute_url(self):
-        return reverse('articles:detail', kwargs={'slug': self.slug})
 
 class Comment(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
@@ -54,3 +51,14 @@ class Comment(models.Model):
     
     def __str__(self):
         return f'Comment by {self.author.username}'
+
+class ArticleLike(models.Model):
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='likes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ['article', 'user']
+    
+    def __str__(self):
+        return f'{self.user.username} liked {self.article.title}'

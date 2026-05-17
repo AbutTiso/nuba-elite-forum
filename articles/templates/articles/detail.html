@@ -10,16 +10,13 @@
 <article class='pt-24 pb-16 bg-white'>
     <div class='max-w-3xl mx-auto px-4'>
         
-        <!-- Category & Date -->
         <div class='flex items-center gap-3 mb-6'>
             <span class='text-[#C8A24C] text-xs font-semibold uppercase tracking-wider bg-[#C8A24C]/5 px-3 py-1 rounded-full'>{{ article.category.name }}</span>
             <span class='text-gray-400 text-sm'>{{ article.published_at|date:'F d, Y' }}</span>
         </div>
         
-        <!-- Title -->
         <h1 class='text-3xl md:text-5xl font-extrabold text-[#062B57] mb-4 leading-tight' style='font-family: Montserrat, sans-serif;'>{{ article.title }}</h1>
         
-        <!-- Author -->
         <div class='flex items-center gap-3 mb-8 pb-8 border-b border-gray-100'>
             <div class='w-10 h-10 bg-[#062B57] rounded-full flex items-center justify-center'>
                 <span class='text-[#C8A24C] font-bold text-sm'>{{ article.author|slice:':1' }}</span>
@@ -30,14 +27,28 @@
             </div>
         </div>
         
-        <!-- Featured Image -->
         {% if article.image %}
         <img src='{{ article.image.url }}' alt='{{ article.title }}' class='w-full rounded-2xl mb-8 shadow-lg'>
         {% endif %}
         
-        <!-- Content -->
         <div class='prose max-w-none text-gray-600 leading-relaxed text-lg'>
             {{ article.content|linebreaks }}
+        </div>
+        
+        <!-- Like + Edit/Delete -->
+        <div class='mt-6 pt-6 border-t border-gray-100 flex items-center gap-4 flex-wrap'>
+            {% if user.is_authenticated %}
+            <button class='like-article-btn flex items-center gap-1.5 text-sm text-gray-400 hover:text-[#C8A24C] transition-colors' data-slug='{{ article.slug }}'>
+                <svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'/></svg>
+                <span class='like-count'>{{ article.likes.count }}</span> like{{ article.likes.count|pluralize }}
+            </button>
+            {% if user.username == article.author or user.is_staff %}
+            <a href='/articles/{{ article.slug }}/edit/' class='text-sm text-gray-400 hover:text-[#C8A24C] transition-colors'>Edit</a>
+            <a href='/articles/{{ article.slug }}/delete/' class='text-sm text-red-400 hover:text-red-600 transition-colors'>Delete</a>
+            {% endif %}
+            {% else %}
+            <span class='text-sm text-gray-400'>{{ article.likes.count }} like{{ article.likes.count|pluralize }}</span>
+            {% endif %}
         </div>
         
         <!-- Comments Section -->
@@ -55,7 +66,12 @@
                             <span class='text-[#C8A24C] font-bold text-xs'>{{ comment.author.username.0|upper }}</span>
                         </div>
                         <div>
-                            <p class='text-[#062B57] font-semibold text-sm'>{{ comment.author.username }}</p>
+                            <p class='text-[#062B57] font-semibold text-sm'>
+                                {{ comment.author.username }}
+                                {% if user.username == comment.author.username or user.is_staff %}
+                                <a href='#' class='text-[10px] text-red-400 hover:text-red-600 ml-2'>Delete</a>
+                                {% endif %}
+                            </p>
                             <p class='text-gray-400 text-xs'>{{ comment.created_at|date:'M d, Y - H:i' }}</p>
                         </div>
                     </div>
@@ -110,5 +126,17 @@
     </div>
 </section>
 {% endif %}
+
+<script>
+document.querySelectorAll('.like-article-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        var slug = this.getAttribute('data-slug');
+        var countSpan = this.querySelector('.like-count');
+        fetch('/articles/' + slug + '/like/')
+            .then(function(r) { return r.json(); })
+            .then(function(data) { countSpan.textContent = data.count; });
+    });
+});
+</script>
 
 {% endblock %}

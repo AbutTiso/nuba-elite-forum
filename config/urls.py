@@ -16,6 +16,7 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')),
     path('forum/', include('forum.urls')),
     path('messages/', include('messages_app.urls')),
+    path('manage/', include('custom_admin.urls')),
 ]
 
 if settings.DEBUG:

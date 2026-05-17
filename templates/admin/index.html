@@ -6,141 +6,276 @@
 {% block branding %}
 <h1 id='site-name'>
     <a href='{% url 'admin:index' %}'>
-        <span style='color:#C8A24C;'>NEF</span> Administration
+        <span style='color:#C8A24C;font-weight:800;'>NEF</span> 
+        <span style='color:white;font-weight:400;font-size:13px;'>Administration</span>
     </a>
 </h1>
 {% endblock %}
 
 {% block nav-global %}{% endblock %}
 
+{% block extrastyle %}
+<style>
+    * { box-sizing: border-box; }
+    .dashboard-container { padding: 16px; max-width: 100%; }
+    .welcome-banner { background: linear-gradient(135deg, #062B57 0%, #0F3D6B 50%, #062B57 100%); color: white; padding: 20px 24px; border-radius: 14px; margin-bottom: 20px; position: relative; overflow: hidden; }
+    .welcome-banner::after { content: ''; position: absolute; top: -30px; right: -30px; width: 120px; height: 120px; background: rgba(200,162,76,0.08); border-radius: 50%; }
+    .welcome-banner h2 { margin: 0 0 4px 0; font-size: clamp(16px, 4vw, 20px); font-weight: 800; font-family: 'Montserrat', sans-serif; }
+    .welcome-banner p { margin: 0; opacity: 0.65; font-size: 12px; }
+    
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
+    .stat-card { background: white; padding: 14px 16px; border-radius: 12px; border: 1px solid #E5E7EB; cursor: pointer; transition: all 0.25s ease; text-decoration: none; display: block; }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(6,43,87,0.08); border-color: #C8A24C; }
+    .stat-card .stat-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+    .stat-card .stat-icon svg { width: 16px; height: 16px; }
+    .stat-card .stat-label { font-size: 10px; color: #6B7280; text-transform: uppercase; letter-spacing: 0.08em; font-weight: 600; margin-bottom: 4px; }
+    .stat-card .stat-value { font-size: clamp(20px, 5vw, 26px); font-weight: 800; }
+    .stat-card .stat-sub { font-size: 9px; color: #9CA3AF; margin-top: 2px; }
+    
+    .content-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 20px; }
+    .panel { background: white; padding: 20px; border-radius: 12px; border: 1px solid #E5E7EB; overflow-x: auto; }
+    .panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid #F3F4F6; flex-wrap: wrap; gap: 8px; }
+    .panel-header h3 { margin: 0; font-size: 14px; font-weight: 700; color: #062B57; }
+    .panel-header a { font-size: 11px; color: #C8A24C; font-weight: 600; text-decoration: none; white-space: nowrap; }
+    .panel-header a:hover { color: #062B57; }
+    
+    .activity-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid #F9FAFB; }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-avatar { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex-shrink: 0; }
+    .activity-info { flex: 1; min-width: 0; }
+    .activity-info .name { font-size: 12px; font-weight: 600; color: #111827; }
+    .activity-info .detail { font-size: 10px; color: #9CA3AF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    
+    .badge { padding: 2px 8px; border-radius: 20px; font-size: 9px; font-weight: 600; white-space: nowrap; }
+    .badge-approved { background: #D1FAE5; color: #065F46; }
+    .badge-pending { background: #FEF3C7; color: #92400E; }
+    .badge-new { background: #FEE2E2; color: #991B1B; }
+    .badge-read { color: #9CA3AF; font-size: 10px; }
+    
+    .btn-action { display: inline-flex; align-items: center; gap: 5px; padding: 8px 14px; border-radius: 8px; text-decoration: none; font-size: 11px; font-weight: 600; transition: all 0.2s ease; white-space: nowrap; }
+    .btn-primary { background: #062B57; color: white; border: 1.5px solid #C8A24C; }
+    .btn-primary:hover { background: #C8A24C; color: #062B57; transform: translateY(-1px); }
+    .btn-secondary { background: #F9F9F7; color: #062B57; border: 1.5px solid #E5E7EB; }
+    .btn-secondary:hover { background: white; border-color: #062B57; }
+    
+    .management-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; margin-bottom: 20px; }
+    .mgmt-card { background: white; padding: 16px; border-radius: 12px; border: 1px solid #E5E7EB; }
+    .mgmt-card h4 { margin: 0 0 6px 0; font-size: 13px; font-weight: 700; color: #062B57; }
+    .mgmt-card p { margin: 0 0 10px 0; font-size: 11px; color: #6B7280; }
+    .mgmt-actions { display: flex; flex-wrap: wrap; gap: 6px; }
+    .mgmt-actions a { font-size: 10px; padding: 5px 12px; border-radius: 6px; text-decoration: none; font-weight: 600; transition: all 0.2s; white-space: nowrap; }
+    
+    .empty-state { text-align: center; padding: 24px 16px; color: #9CA3AF; }
+    .empty-state svg { width: 36px; height: 36px; margin-bottom: 8px; opacity: 0.3; }
+    .empty-state p { font-size: 12px; margin: 0; }
+    
+    .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 20px; }
+    .charts-grid canvas { max-height: 250px; width: 100% !important; }
+    
+    .quick-actions-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+    
+    table { width: 100%; min-width: 300px; }
+    th { white-space: nowrap; font-size: 10px; }
+    td { font-size: 12px; }
+    
+    @media (max-width: 768px) {
+        .dashboard-container { padding: 10px; }
+        .welcome-banner { padding: 16px 18px; }
+        .stats-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 8px; }
+        .stat-card { padding: 12px 14px; }
+        .management-grid { grid-template-columns: 1fr; }
+        .content-grid { grid-template-columns: 1fr; }
+        .charts-grid { grid-template-columns: 1fr; }
+        .panel { padding: 14px; }
+        .btn-action { padding: 6px 10px; font-size: 10px; }
+    }
+    
+    @media (max-width: 480px) {
+        .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        .welcome-banner h2 { font-size: 15px; }
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-<div id='content-main'>
+<div class='dashboard-container'>
 
-    <!-- Welcome -->
-    <div style='background:linear-gradient(135deg,#062B57,#0A3D7A);color:white;padding:24px 28px;border-radius:16px;margin-bottom:24px;'>
-        <h2 style='margin:0 0 6px 0;font-size:22px;font-weight:800;font-family:Montserrat,sans-serif;'>
-            Welcome back, {{ user.get_full_name|default:user.username }}
-        </h2>
-        <p style='margin:0;opacity:0.7;font-size:14px;'>Nuba Elite Forum management dashboard</p>
+    <div class='welcome-banner'>
+        <h2>Welcome back, {{ user.get_full_name|default:user.username }}</h2>
+        <p>Nuba Elite Forum &bull; Management Dashboard</p>
     </div>
 
-    <!-- Stats Cards -->
-    <div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px;'>
-        
-        <div style='background:white;padding:20px;border-radius:12px;border-left:4px solid #C8A24C;box-shadow:0 1px 3px rgba(0,0,0,0.06);'>
-            <div style='font-size:12px;color:#6B7280;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;margin-bottom:8px;'>Total Members</div>
-            <div style='font-size:32px;font-weight:800;color:#062B57;'>{{ total_members }}</div>
-        </div>
+    <div class='stats-grid'>
+        <a href='{% url 'admin:members_member_changelist' %}' class='stat-card'>
+            <div class='stat-icon' style='background:#EBF5FF;'><svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='#3B82F6' stroke-width='2'><path d='M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2'/><circle cx='9' cy='7' r='4'/><path d='M23 21v-2a4 4 0 00-3-3.87'/><path d='M16 3.13a4 4 0 010 7.75'/></svg></div>
+            <div class='stat-label'>Total Members</div>
+            <div class='stat-value' style='color:#2563EB;'>{{ total_members }}</div>
+            <div class='stat-sub'>Registered users</div>
+        </a>
+        <a href='{% url 'admin:members_member_changelist' %}?is_approved__exact=0' class='stat-card'>
+            <div class='stat-icon' style='background:#FFF7ED;'><svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='#F59E0B' stroke-width='2'><path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/></svg></div>
+            <div class='stat-label'>Pending Approval</div>
+            <div class='stat-value' style='color:#D97706;'>{{ pending_members }}</div>
+            <div class='stat-sub'>Awaiting review</div>
+        </a>
+        <a href='{% url 'admin:articles_article_changelist' %}' class='stat-card'>
+            <div class='stat-icon' style='background:#ECFDF5;'><svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='#10B981' stroke-width='2'><path d='M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z'/><polyline points='14 2 14 8 20 8'/><line x1='16' y1='13' x2='8' y2='13'/><line x1='16' y1='17' x2='8' y2='17'/></svg></div>
+            <div class='stat-label'>Published Articles</div>
+            <div class='stat-value' style='color:#059669;'>{{ published_articles }}</div>
+            <div class='stat-sub'>Live on site</div>
+        </a>
+        <a href='{% url 'admin:events_event_changelist' %}' class='stat-card'>
+            <div class='stat-icon' style='background:#EEF2FF;'><svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='#6366F1' stroke-width='2'><rect x='3' y='4' width='18' height='18' rx='2' ry='2'/><line x1='16' y1='2' x2='16' y2='6'/><line x1='8' y1='2' x2='8' y2='6'/><line x1='3' y1='10' x2='21' y2='10'/></svg></div>
+            <div class='stat-label'>Upcoming Events</div>
+            <div class='stat-value' style='color:#4F46E5;'>{{ upcoming_events_count }}</div>
+            <div class='stat-sub'>Scheduled</div>
+        </a>
+        <a href='{% url 'admin:contact_contactmessage_changelist' %}?is_read__exact=0' class='stat-card'>
+            <div class='stat-icon' style='background:#FEF2F2;'><svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='#EF4444' stroke-width='2'><path d='M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z'/></svg></div>
+            <div class='stat-label'>Unread Messages</div>
+            <div class='stat-value' style='color:#DC2626;'>{{ unread_messages }}</div>
+            <div class='stat-sub'>Needs attention</div>
+        </a>
+    </div>
 
-        <div style='background:white;padding:20px;border-radius:12px;border-left:4px solid #F59E0B;box-shadow:0 1px 3px rgba(0,0,0,0.06);'>
-            <div style='font-size:12px;color:#6B7280;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;margin-bottom:8px;'>Pending Approvals</div>
-            <div style='font-size:32px;font-weight:800;color:#D97706;'>{{ pending_members }}</div>
+    <div class='management-grid'>
+        <div class='mgmt-card'>
+            <h4>👥 Member Management</h4>
+            <p>Approve, suspend, or manage member accounts</p>
+            <div class='mgmt-actions'>
+                <a href='{% url 'admin:members_member_changelist' %}' style='background:#062B57;color:white;'>View All</a>
+                <a href='{% url 'admin:members_member_changelist' %}?is_approved__exact=0' style='background:#FEF3C7;color:#92400E;'>Pending ({{ pending_members }})</a>
+                <a href='{% url 'admin:auth_user_changelist' %}' style='background:#F9F9F7;color:#062B57;'>Manage Users</a>
+            </div>
         </div>
-
-        <div style='background:white;padding:20px;border-radius:12px;border-left:4px solid #00A651;box-shadow:0 1px 3px rgba(0,0,0,0.06);'>
-            <div style='font-size:12px;color:#6B7280;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;margin-bottom:8px;'>Published Articles</div>
-            <div style='font-size:32px;font-weight:800;color:#059669;'>{{ published_articles }}</div>
+        <div class='mgmt-card'>
+            <h4>📝 Content Management</h4>
+            <p>Create and manage articles, events, and media</p>
+            <div class='mgmt-actions'>
+                <a href='{% url 'admin:articles_article_add' %}' style='background:#062B57;color:white;'>+ Article</a>
+                <a href='{% url 'admin:events_event_add' %}' style='background:#062B57;color:white;'>+ Event</a>
+                <a href='{% url 'admin:articles_article_changelist' %}' style='background:#F9F9F7;color:#062B57;'>All Articles</a>
+                <a href='{% url 'admin:events_event_changelist' %}' style='background:#F9F9F7;color:#062B57;'>All Events</a>
+            </div>
         </div>
-
-        <div style='background:white;padding:20px;border-radius:12px;border-left:4px solid #3B82F6;box-shadow:0 1px 3px rgba(0,0,0,0.06);'>
-            <div style='font-size:12px;color:#6B7280;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;margin-bottom:8px;'>Upcoming Events</div>
-            <div style='font-size:32px;font-weight:800;color:#2563EB;'>{{ upcoming_events_count }}</div>
+        <div class='mgmt-card'>
+            <h4>💬 Forum Moderation</h4>
+            <p>Pin, close, or moderate discussions</p>
+            <div class='mgmt-actions'>
+                <a href='{% url 'admin:forum_thread_changelist' %}' style='background:#062B57;color:white;'>All Threads</a>
+                <a href='{% url 'admin:forum_forumcategory_changelist' %}' style='background:#F9F9F7;color:#062B57;'>Categories</a>
+                <a href='{% url 'admin:forum_post_changelist' %}' style='background:#F9F9F7;color:#062B57;'>All Posts</a>
+            </div>
         </div>
-
-        <div style='background:white;padding:20px;border-radius:12px;border-left:4px solid #D72638;box-shadow:0 1px 3px rgba(0,0,0,0.06);'>
-            <div style='font-size:12px;color:#6B7280;text-transform:uppercase;letter-spacing:0.1em;font-weight:600;margin-bottom:8px;'>Unread Messages</div>
-            <div style='font-size:32px;font-weight:800;color:#DC2626;'>{{ unread_messages }}</div>
+        <div class='mgmt-card'>
+            <h4>👔 Leadership & Team</h4>
+            <p>Manage team profiles and leadership display</p>
+            <div class='mgmt-actions'>
+                <a href='{% url 'admin:leadership_leadershipmember_add' %}' style='background:#062B57;color:white;'>+ Add Leader</a>
+                <a href='{% url 'admin:leadership_leadershipmember_changelist' %}' style='background:#F9F9F7;color:#062B57;'>View Team</a>
+            </div>
+        </div>
+        <div class='mgmt-card'>
+            <h4>📧 Communication</h4>
+            <p>Messages, subscribers, and outreach</p>
+            <div class='mgmt-actions'>
+                <a href='{% url 'admin:contact_contactmessage_changelist' %}' style='background:#062B57;color:white;'>Messages ({{ unread_messages }} new)</a>
+                <a href='{% url 'admin:contact_newslettersubscriber_changelist' %}' style='background:#F9F9F7;color:#062B57;'>Subscribers</a>
+            </div>
+        </div>
+        <div class='mgmt-card'>
+            <h4>🖼️ Gallery & Media</h4>
+            <p>Upload and manage photos and videos</p>
+            <div class='mgmt-actions'>
+                <a href='{% url 'admin:gallery_galleryitem_add' %}' style='background:#062B57;color:white;'>+ Add Media</a>
+                <a href='{% url 'admin:gallery_galleryitem_changelist' %}' style='background:#F9F9F7;color:#062B57;'>View All</a>
+                <a href='{% url 'admin:gallery_gallerycategory_changelist' %}' style='background:#F9F9F7;color:#062B57;'>Categories</a>
+            </div>
         </div>
     </div>
 
-    <!-- Two Column Layout -->
-    <div style='display:grid;grid-template-columns:1fr 1fr;gap:24px;'>
-        
-        <!-- Recent Members -->
-        <div style='background:white;padding:24px;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.06);'>
-            <h3 style='margin:0 0 16px 0;font-size:16px;font-weight:700;color:#062B57;'>Recent Members</h3>
+    <div class='content-grid'>
+        <div class='panel'>
+            <div class='panel-header'><h3>Recent Members</h3><a href='{% url 'admin:members_member_changelist' %}'>View All &rarr;</a></div>
             {% if recent_members %}
-            <table style='width:100%;border-collapse:collapse;'>
-                <thead>
-                    <tr style='border-bottom:2px solid #E5E7EB;'>
-                        <th style='text-align:left;padding:8px 0;font-size:12px;color:#6B7280;text-transform:uppercase;'>Name</th>
-                        <th style='text-align:left;padding:8px 0;font-size:12px;color:#6B7280;text-transform:uppercase;'>Country</th>
-                        <th style='text-align:left;padding:8px 0;font-size:12px;color:#6B7280;text-transform:uppercase;'>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for member in recent_members %}
-                    <tr style='border-bottom:1px solid #F3F4F6;'>
-                        <td style='padding:10px 0;font-size:14px;color:#111827;'>{{ member.full_name }}</td>
-                        <td style='padding:10px 0;font-size:13px;color:#6B7280;'>{{ member.country }}</td>
-                        <td style='padding:10px 0;'>
-                            {% if member.is_approved %}
-                            <span style='background:#D1FAE5;color:#065F46;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;'>Approved</span>
-                            {% else %}
-                            <span style='background:#FEF3C7;color:#92400E;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;'>Pending</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <a href='{% url 'admin:members_member_changelist' %}' style='display:inline-block;margin-top:12px;color:#C8A24C;font-size:13px;font-weight:600;text-decoration:none;'>View all members &rarr;</a>
-            {% else %}
-            <p style='color:#9CA3AF;font-size:14px;'>No members yet.</p>
-            {% endif %}
+                {% for member in recent_members %}
+                <div class='activity-item'>
+                    <div class='activity-avatar' style='background:{% if member.is_approved %}#D1FAE5;color:#065F46{% else %}#FEF3C7;color:#92400E{% endif %};'>{{ member.full_name.0|default:'?' }}</div>
+                    <div class='activity-info'><div class='name'>{{ member.full_name }}</div><div class='detail'>{{ member.country }}{% if member.profession %} &bull; {{ member.profession }}{% endif %}</div></div>
+                    <span class='badge {% if member.is_approved %}badge-approved{% else %}badge-pending{% endif %}'>{% if member.is_approved %}Approved{% else %}Pending{% endif %}</span>
+                </div>
+                {% endfor %}
+            {% else %}<div class='empty-state'><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2'/><circle cx='9' cy='7' r='4'/></svg><p>No members yet</p></div>{% endif %}
         </div>
-
-        <!-- Recent Messages -->
-        <div style='background:white;padding:24px;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.06);'>
-            <h3 style='margin:0 0 16px 0;font-size:16px;font-weight:700;color:#062B57;'>Recent Messages</h3>
+        <div class='panel'>
+            <div class='panel-header'><h3>Recent Messages</h3><a href='{% url 'admin:contact_contactmessage_changelist' %}'>View All &rarr;</a></div>
             {% if recent_messages %}
-            <table style='width:100%;border-collapse:collapse;'>
-                <thead>
-                    <tr style='border-bottom:2px solid #E5E7EB;'>
-                        <th style='text-align:left;padding:8px 0;font-size:12px;color:#6B7280;text-transform:uppercase;'>From</th>
-                        <th style='text-align:left;padding:8px 0;font-size:12px;color:#6B7280;text-transform:uppercase;'>Subject</th>
-                        <th style='text-align:left;padding:8px 0;font-size:12px;color:#6B7280;text-transform:uppercase;'>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for msg in recent_messages %}
-                    <tr style='border-bottom:1px solid #F3F4F6;'>
-                        <td style='padding:10px 0;font-size:14px;color:#111827;'>{{ msg.name }}</td>
-                        <td style='padding:10px 0;font-size:13px;color:#6B7280;'>{{ msg.subject|truncatechars:30 }}</td>
-                        <td style='padding:10px 0;'>
-                            {% if msg.is_read %}
-                            <span style='color:#9CA3AF;font-size:12px;'>Read</span>
-                            {% else %}
-                            <span style='background:#FEE2E2;color:#991B1B;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;'>New</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-            <a href='{% url 'admin:contact_contactmessage_changelist' %}' style='display:inline-block;margin-top:12px;color:#C8A24C;font-size:13px;font-weight:600;text-decoration:none;'>View all messages &rarr;</a>
-            {% else %}
-            <p style='color:#9CA3AF;font-size:14px;'>No messages yet.</p>
-            {% endif %}
+                {% for msg in recent_messages %}
+                <div class='activity-item'>
+                    <div class='activity-avatar' style='background:{% if msg.is_read %}#F3F4F6;color:#9CA3AF{% else %}#FEE2E2;color:#991B1B{% endif %};'>{{ msg.name.0|default:'?' }}</div>
+                    <div class='activity-info'><div class='name'>{{ msg.name }}</div><div class='detail'>{{ msg.subject|truncatechars:35 }}</div></div>
+                    <span class='badge {% if msg.is_read %}badge-read{% else %}badge-new{% endif %}'>{% if msg.is_read %}Read{% else %}New{% endif %}</span>
+                </div>
+                {% endfor %}
+            {% else %}<div class='empty-state'><svg viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5'><path d='M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z'/></svg><p>No messages yet</p></div>{% endif %}
         </div>
     </div>
 
-    <!-- Quick Actions -->
-    <div style='margin-top:24px;background:white;padding:24px;border-radius:12px;box-shadow:0 1px 3px rgba(0,0,0,0.06);'>
-        <h3 style='margin:0 0 16px 0;font-size:16px;font-weight:700;color:#062B57;'>Quick Actions</h3>
-        <div style='display:flex;flex-wrap:wrap;gap:10px;'>
-            <a href='{% url 'admin:articles_article_add' %}' style='background:#062B57;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;border:2px solid #C8A24C;'>+ New Article</a>
-            <a href='{% url 'admin:events_event_add' %}' style='background:#062B57;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;border:2px solid #C8A24C;'>+ New Event</a>
-            <a href='{% url 'admin:leadership_leadershipmember_add' %}' style='background:#062B57;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;border:2px solid #C8A24C;'>+ Add Leader</a>
-            <a href='{% url 'admin:gallery_galleryitem_add' %}' style='background:#062B57;color:white;padding:10px 20px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;border:2px solid #C8A24C;'>+ Add Gallery Item</a>
-            <a href='/' target='_blank' style='background:#F9F9F7;color:#062B57;padding:10px 20px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:600;border:2px solid #062B57;'>View Website</a>
+    <div class='charts-grid'>
+        <div class='panel'>
+            <div class='panel-header'><h3>Members Growth</h3></div>
+            <canvas id='membersChart'></canvas>
+        </div>
+        <div class='panel'>
+            <div class='panel-header'><h3>Content Overview</h3></div>
+            <canvas id='contentChart'></canvas>
         </div>
     </div>
 
-    <!-- Model Links (below everything) -->
-    <div style='margin-top:24px;'>
-        {{ block.super }}
+    <div class='panel' style='margin-bottom:20px;'>
+        <div class='panel-header'><h3>Quick Actions</h3></div>
+        <div class='quick-actions-wrap'>
+            <a href='{% url 'admin:articles_article_add' %}' class='btn-action btn-primary'><svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'><line x1='12' y1='5' x2='12' y2='19'/><line x1='5' y1='12' x2='19' y2='12'/></svg>New Article</a>
+            <a href='{% url 'admin:events_event_add' %}' class='btn-action btn-primary'><svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'><line x1='12' y1='5' x2='12' y2='19'/><line x1='5' y1='12' x2='19' y2='12'/></svg>New Event</a>
+            <a href='{% url 'admin:leadership_leadershipmember_add' %}' class='btn-action btn-primary'><svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'><line x1='12' y1='5' x2='12' y2='19'/><line x1='5' y1='12' x2='19' y2='12'/></svg>Add Leader</a>
+            <a href='{% url 'admin:gallery_galleryitem_add' %}' class='btn-action btn-secondary'><svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5'><line x1='12' y1='5' x2='12' y2='19'/><line x1='5' y1='12' x2='19' y2='12'/></svg>Gallery Item</a>
+            <a href='{% url 'admin:auth_user_changelist' %}' class='btn-action btn-secondary'><svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2'/><circle cx='9' cy='7' r='4'/></svg>Manage Users</a>
+            <a href='/' target='_blank' class='btn-action btn-secondary'><svg width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'><path d='M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6'/><polyline points='15 3 21 3 21 9'/><line x1='10' y1='14' x2='21' y2='3'/></svg>View Website</a>
+        </div>
     </div>
+
+    <div style='margin-top:20px;'>{{ block.super }}</div>
 
 </div>
+
+<script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+<script>
+new Chart(document.getElementById('membersChart'), {
+    type: 'line',
+    data: {
+        labels: JSON.parse('{{ monthly_labels|safe|default:"[]" }}'),
+        datasets: [{
+            label: 'New Members',
+            data: JSON.parse('{{ monthly_counts_json|safe|default:"[]" }}'),
+            borderColor: '#C8A24C',
+            backgroundColor: 'rgba(200,162,76,0.1)',
+            fill: true,
+            tension: 0.4
+        }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } } }
+});
+
+new Chart(document.getElementById('contentChart'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Articles', 'Threads', 'Replies', 'Events'],
+        datasets: [{
+            data: [{{ published_articles }}, {{ total_threads|default:0 }}, {{ total_posts|default:0 }}, {{ upcoming_events_count }}],
+            backgroundColor: ['#062B57', '#C8A24C', '#0A3D7A', '#D4AF37']
+        }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom' } } }
+});
+</script>
 {% endblock %}

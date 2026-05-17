@@ -1,14 +1,46 @@
-﻿{% extends 'base.html' %}{% block title %}My Posts — NEF{% endblock %}
+﻿{% extends 'base.html' %}
+{% block title %}Replies — NEF{% endblock %}
 {% block content %}
-<section class='min-h-screen pt-24 pb-16 bg-white'><div class='max-w-4xl mx-auto px-4'>
-<h1 class='text-3xl font-extrabold text-[#062B57] mb-8' style='font-family: Montserrat, sans-serif;'>My Replies</h1>
-{% if posts %}
-<div class='space-y-3'>{% for post in posts %}
-<a href='{% url 'forum:thread' post.thread.slug %}' class='block bg-[#F9F9F7] rounded-2xl p-5 border border-gray-100 hover:shadow-md'>
-<p class='text-[#062B57] font-bold text-sm'>Re: {{ post.thread.title }}</p>
-<p class='text-gray-500 text-xs mt-1'>{{ post.content|truncatechars:100 }}</p>
-<p class='text-gray-400 text-xs mt-1'>{{ post.created_at|date:'M d, Y' }}</p>
-</a>{% endfor %}</div>
-{% else %}<p class='text-gray-500 text-center py-16'>No replies yet.</p>{% endif %}
-</div></section>
+
+<section class='relative pt-24 pb-16 bg-[#062B57] overflow-hidden'>
+    <div class='relative max-w-4xl mx-auto px-4 text-center'>
+        <span class='inline-block text-[#C8A24C] font-semibold text-xs uppercase tracking-[0.2em] bg-[#C8A24C]/10 px-3 py-1 rounded-full mb-4'>Community</span>
+        <h1 class='text-4xl font-extrabold text-white mb-2' style='font-family: Montserrat, sans-serif;'>Replies</h1>
+        <div class='w-20 h-0.5 bg-gradient-to-r from-transparent via-[#C8A24C] to-transparent mx-auto'></div>
+    </div>
+</section>
+
+<section class='py-12 bg-white'>
+    <div class='max-w-4xl mx-auto px-4'>
+        
+        {% if my_posts %}
+        <h2 class='text-lg font-extrabold text-[#062B57] mb-4'>My Replies</h2>
+        <div class='space-y-3 mb-10'>
+            {% for post in my_posts %}
+            <a href='{% url 'forum:thread' post.thread.slug %}' class='block bg-[#F9F9F7] rounded-2xl p-5 border border-gray-100 hover:shadow-md group'>
+                <p class='text-[#062B57] font-bold text-sm'>Re: {{ post.thread.title }}</p>
+                <p class='text-gray-500 text-xs mt-1'>{{ post.content|truncatechars:100 }}</p>
+                <p class='text-gray-400 text-xs mt-1'>{{ post.created_at|date:'M d, Y' }}</p>
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <h2 class='text-lg font-extrabold text-[#062B57] mb-4'>All Recent Replies</h2>
+        {% if all_posts %}
+        <div class='space-y-3'>
+            {% for post in all_posts %}
+            <a href='{% url 'forum:thread' post.thread.slug %}' class='block bg-[#F9F9F7] rounded-2xl p-5 border border-gray-100 hover:shadow-md group'>
+                <p class='text-[#062B57] font-bold text-sm'>{{ post.author.username }} &mdash; Re: {{ post.thread.title }}</p>
+                <p class='text-gray-500 text-xs mt-1'>{{ post.content|truncatechars:100 }}</p>
+                <p class='text-gray-400 text-xs mt-1'>{{ post.created_at|date:'M d, Y' }}</p>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class='text-gray-500 text-center py-8'>No replies yet.</p>
+        {% endif %}
+    </div>
+</section>
+
 {% endblock %}

@@ -1,0 +1,71 @@
+﻿{% extends 'custom_admin/base.html' %}
+{% block title %}Create Event | NEF Admin{% endblock %}
+{% block header %}Create Event{% endblock %}
+{% block content %}
+
+<div class='max-w-3xl mx-auto'>
+    <div class='bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden'>
+        <div class='px-6 py-4 border-b border-gray-100 bg-[#F9F9F7]'>
+            <h3 class='font-bold text-sm text-[#062B57]'>New Event</h3>
+            <p class='text-xs text-gray-400 mt-0.5'>Schedule a new event for the community</p>
+        </div>
+        <div class='p-6'>
+            <form method='post' class='space-y-5'>
+                {% csrf_token %}
+                
+                <div class='grid md:grid-cols-2 gap-4'>
+                    <div>
+                        <label class='block text-sm font-semibold text-[#062B57] mb-1.5'>Title <span class='text-red-400'>*</span></label>
+                        <input type='text' name='title' placeholder='Event title...' class='w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 transition-all' required>
+                    </div>
+                    <div>
+                        <label class='block text-sm font-semibold text-[#062B57] mb-1.5'>Slug <span class='text-red-400'>*</span></label>
+                        <input type='text' name='slug' placeholder='event-url-slug' class='w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 transition-all' required>
+                    </div>
+                </div>
+                
+                <div class='grid md:grid-cols-3 gap-4'>
+                    <div>
+                        <label class='block text-sm font-semibold text-[#062B57] mb-1.5'>Event Type</label>
+                        <select name='event_type' class='w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 transition-all bg-white'>
+                            <option value='forum'>Forum</option>
+                            <option value='conference'>Conference</option>
+                            <option value='webinar'>Webinar</option>
+                            <option value='workshop'>Workshop</option>
+                            <option value='meeting'>Meeting</option>
+                            <option value='youth_program'>Youth Program</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class='block text-sm font-semibold text-[#062B57] mb-1.5'>Date & Time <span class='text-red-400'>*</span></label>
+                        <input type='datetime-local' name='event_date' class='w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 transition-all' required>
+                    </div>
+                    <div>
+                        <label class='block text-sm font-semibold text-[#062B57] mb-1.5'>Venue</label>
+                        <input type='text' name='venue' placeholder='Location or Virtual...' class='w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 transition-all'>
+                    </div>
+                </div>
+                
+                <div>
+                    <label class='block text-sm font-semibold text-[#062B57] mb-1.5'>Short Description</label>
+                    <textarea name='short_description' rows='2' placeholder='Brief summary for event cards...' class='w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 transition-all resize-none'></textarea>
+                </div>
+                
+                <div>
+                    <label class='block text-sm font-semibold text-[#062B57] mb-1.5'>Full Description <span class='text-red-400'>*</span></label>
+                    <textarea name='description' rows='8' placeholder='Describe the event in detail...' class='w-full px-4 py-2.5 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 transition-all resize-y' required></textarea>
+                </div>
+                
+                <div class='flex items-center gap-3 pt-2'>
+                    <button type='submit' class='btn-primary'>
+                        <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M5 13l4 4L19 7'/></svg>
+                        Create Event
+                    </button>
+                    <a href='/manage/events/' class='btn-secondary'>Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

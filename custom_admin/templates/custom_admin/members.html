@@ -1,0 +1,101 @@
+﻿{% extends 'custom_admin/base.html' %}
+{% block title %}Members | NEF Admin{% endblock %}
+{% block header %}Members{% endblock %}
+{% block content %}
+
+<div class='flex items-center justify-between mb-6 flex-wrap gap-3'>
+    <div>
+        <h1 class='text-2xl font-extrabold text-[#062B57]' style='font-family:Montserrat,sans-serif;'>Members</h1>
+        <p class='text-sm text-gray-500 mt-1'>Manage all registered members, approvals, and roles</p>
+    </div>
+    <div class='flex items-center gap-2 flex-wrap'>
+        <span class='text-sm text-gray-400'>{{ members|length }} total</span>
+        <a href='/manage/members/' class='text-xs px-3 py-1.5 rounded-full font-semibold bg-[#062B57] text-white transition-colors'>All</a>
+        <a href='/manage/members/?status=pending' class='text-xs px-3 py-1.5 rounded-full font-semibold bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100 transition-colors'>Pending</a>
+        <a href='/manage/members/?status=approved' class='text-xs px-3 py-1.5 rounded-full font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 transition-colors'>Approved</a>
+        <a href='/manage/members/?status=admin' class='text-xs px-3 py-1.5 rounded-full font-semibold bg-[#C8A24C]/10 text-[#C8A24C] border border-[#C8A24C]/30 hover:bg-[#C8A24C]/20 transition-colors'>Admins</a>
+    </div>
+</div>
+
+<div class='bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden'>
+    {% if members %}
+    <div class='overflow-x-auto'>
+        <table class='w-full'>
+            <thead class='bg-[#F9F9F7] border-b border-gray-100'>
+                <tr>
+                    <th class='text-left px-5 py-3 text-[10px] font-semibold text-gray-500 uppercase tracking-wider'>Member</th>
+                    <th class='text-left px-5 py-3 text-[10px] font-semibold text-gray-500 uppercase tracking-wider hidden md:table-cell'>Email</th>
+                    <th class='text-left px-5 py-3 text-[10px] font-semibold text-gray-500 uppercase tracking-wider hidden lg:table-cell'>Country</th>
+                    <th class='text-left px-5 py-3 text-[10px] font-semibold text-gray-500 uppercase tracking-wider hidden lg:table-cell'>Profession</th>
+                    <th class='text-center px-5 py-3 text-[10px] font-semibold text-gray-500 uppercase tracking-wider'>Status</th>
+                    <th class='text-center px-5 py-3 text-[10px] font-semibold text-gray-500 uppercase tracking-wider hidden sm:table-cell'>Role</th>
+                    <th class='text-center px-5 py-3 text-[10px] font-semibold text-gray-500 uppercase tracking-wider'>Actions</th>
+                </tr>
+            </thead>
+            <tbody class='divide-y divide-gray-50'>
+                {% for member in members %}
+                <tr class='table-row'>
+                    <td class='px-5 py-3.5'>
+                        <div class='flex items-center gap-3'>
+                            <div class='w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0
+                                {% if member.user and member.user.is_staff %}bg-[#C8A24C]/20 text-[#C8A24C]
+                                {% elif member.is_approved %}bg-emerald-100 text-emerald-700
+                                {% else %}bg-amber-100 text-amber-700{% endif %}'>
+                                {{ member.full_name.0|default:'?' }}
+                            </div>
+                            <div>
+                                <p class='text-sm font-semibold text-[#062B57]'>{{ member.full_name }}</p>
+                                <p class='text-xs text-gray-400 md:hidden'>{{ member.email }}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class='px-5 py-3.5 text-sm text-gray-500 hidden md:table-cell'>{{ member.email }}</td>
+                    <td class='px-5 py-3.5 text-sm text-gray-500 hidden lg:table-cell'>{{ member.country }}</td>
+                    <td class='px-5 py-3.5 text-sm text-gray-500 hidden lg:table-cell'>{{ member.profession|default:'—' }}</td>
+                    <td class='px-5 py-3.5 text-center'>
+                        {% if member.is_approved %}
+                        <span class='badge badge-approved'>Approved</span>
+                        {% else %}
+                        <span class='badge badge-pending'>Pending</span>
+                        {% endif %}
+                    </td>
+                    <td class='px-5 py-3.5 text-center hidden sm:table-cell'>
+                        {% if member.user and member.user.is_staff %}
+                        <span class='badge badge-admin'>Admin</span>
+                        {% else %}
+                        <span class='text-xs text-gray-400'>Member</span>
+                        {% endif %}
+                    </td>
+                    <td class='px-5 py-3.5'>
+                        <div class='flex gap-1.5 justify-center flex-wrap'>
+                            <!-- Approve / Suspend -->
+                            {% if not member.is_approved %}
+                            <a href='/manage/members/{{ member.id }}/approve/' class='text-xs px-3 py-1.5 bg-emerald-500 text-white rounded-lg font-semibold hover:bg-emerald-600 transition-colors' title='Approve this member'>Approve</a>
+                            <a href='/manage/members/{{ member.id }}/delete/' class='text-xs px-3 py-1.5 bg-red-500 text-white rounded-lg font-semibold hover:bg-red-600 transition-colors' onclick='return confirm(\"Permanently delete {{ member.full_name }}?\")' title='Delete this member'>Delete</a>
+                            {% else %}
+                            <a href='/manage/members/{{ member.id }}/suspend/' class='text-xs px-3 py-1.5 bg-amber-500 text-white rounded-lg font-semibold hover:bg-amber-600 transition-colors' title='Suspend this member'>Suspend</a>
+                            {% endif %}
+                            
+                            <!-- Make Admin / Remove Admin -->
+                            {% if member.user and not member.user.is_staff %}
+                            <a href='/manage/members/{{ member.id }}/make-admin/' class='text-xs px-3 py-1.5 bg-[#062B57] text-white rounded-lg font-semibold hover:bg-[#0A3D7A] transition-colors' title='Grant admin privileges'>Make Admin</a>
+                            {% elif member.user and member.user.is_staff and member.user != request.user %}
+                            <a href='/manage/members/{{ member.id }}/remove-admin/' class='text-xs px-3 py-1.5 bg-red-100 text-red-600 rounded-lg font-semibold hover:bg-red-200 transition-colors' title='Remove admin privileges'>Remove Admin</a>
+                            {% endif %}
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class='text-center py-16'>
+        <svg class='w-12 h-12 text-gray-200 mx-auto mb-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857'/></svg>
+        <h3 class='text-lg font-bold text-gray-400 mb-1'>No Members Yet</h3>
+        <p class='text-sm text-gray-400'>Members will appear here after registration</p>
+    </div>
+    {% endif %}
+</div>
+
+{% endblock %}

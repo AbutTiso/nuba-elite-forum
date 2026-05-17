@@ -1,0 +1,36 @@
+﻿{% extends 'base.html' %}
+{% block title %}Edit Thread — NEF{% endblock %}
+
+{% block content %}
+
+<section class='relative pt-24 pb-16 bg-[#062B57] overflow-hidden'>
+    <div class='relative max-w-4xl mx-auto px-4 text-center'>
+        <span class='inline-block text-[#C8A24C] font-semibold text-xs uppercase tracking-[0.2em] bg-[#C8A24C]/10 px-3 py-1 rounded-full mb-4'>Edit</span>
+        <h1 class='text-4xl font-extrabold text-white mb-2' style='font-family: Montserrat, sans-serif;'>Edit Thread</h1>
+        <div class='w-20 h-0.5 bg-gradient-to-r from-transparent via-[#C8A24C] to-transparent mx-auto'></div>
+    </div>
+</section>
+
+<section class='py-16 bg-white'>
+    <div class='max-w-2xl mx-auto px-4'>
+        <form method='post' class='bg-gradient-to-br from-[#F9F9F7] to-white rounded-2xl p-8 border border-gray-100 shadow-sm'>
+            {% csrf_token %}
+            <div class='space-y-5'>
+                <div>
+                    <label class='block text-sm font-semibold text-[#062B57] mb-2'>Title</label>
+                    <input type='text' name='title' value='{{ thread.title }}' class='w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 text-sm transition-all' required>
+                </div>
+                <div>
+                    <label class='block text-sm font-semibold text-[#062B57] mb-2'>Content</label>
+                    <textarea name='content' rows='10' class='w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 resize-none text-sm transition-all' required>{{ thread.content }}</textarea>
+                </div>
+                <div class='flex items-center gap-4 pt-2'>
+                    <button type='submit' class='px-8 py-3 bg-[#062B57] text-white font-bold rounded-full border-2 border-[#C8A24C] hover:bg-[#C8A24C] hover:text-[#062B57] transition-all duration-300 shadow-md hover:shadow-lg'>Save Changes</button>
+                    <a href='/forum/thread/{{ thread.slug }}/' class='text-gray-400 hover:text-[#062B57] text-sm transition-colors'>Cancel</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

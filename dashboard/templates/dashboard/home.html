@@ -24,37 +24,37 @@
 <section class='py-12 bg-white'>
     <div class='max-w-6xl mx-auto px-4'>
         
-        <!-- Community Stats Row -->
+        <!-- Community Stats Row - CLICKABLE -->
         <div class='grid grid-cols-2 md:grid-cols-5 gap-4 mb-10'>
-            <div class='bg-gradient-to-br from-[#F9F9F7] to-white rounded-2xl p-4 text-center border border-gray-100 shadow-sm'>
+            <a href='/members/directory/' class='bg-gradient-to-br from-[#F9F9F7] to-white rounded-2xl p-4 text-center border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 block'>
                 <div class='text-2xl font-black text-[#062B57]'>{{ total_members }}</div>
                 <div class='text-[10px] text-gray-500 uppercase tracking-wider font-semibold'>Members</div>
-            </div>
-            <div class='bg-gradient-to-br from-[#F9F9F7] to-white rounded-2xl p-4 text-center border border-gray-100 shadow-sm'>
+            </a>
+            <a href='/forum/' class='bg-gradient-to-br from-[#F9F9F7] to-white rounded-2xl p-4 text-center border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 block'>
                 <div class='text-2xl font-black text-[#062B57]'>{{ total_threads }}</div>
                 <div class='text-[10px] text-gray-500 uppercase tracking-wider font-semibold'>Threads</div>
-            </div>
-            <div class='bg-gradient-to-br from-[#F9F9F7] to-white rounded-2xl p-4 text-center border border-gray-100 shadow-sm'>
+            </a>
+            <a href='/forum/' class='bg-gradient-to-br from-[#F9F9F7] to-white rounded-2xl p-4 text-center border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 block'>
                 <div class='text-2xl font-black text-[#062B57]'>{{ total_posts }}</div>
                 <div class='text-[10px] text-gray-500 uppercase tracking-wider font-semibold'>Replies</div>
-            </div>
-            <div class='bg-gradient-to-br from-[#F9F9F7] to-white rounded-2xl p-4 text-center border border-gray-100 shadow-sm'>
+            </a>
+            <a href='/dashboard/my-threads/' class='bg-gradient-to-br from-[#F9F9F7] to-white rounded-2xl p-4 text-center border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 block'>
                 <div class='text-2xl font-black text-[#062B57]'>{{ my_threads }}</div>
                 <div class='text-[10px] text-gray-500 uppercase tracking-wider font-semibold'>My Threads</div>
-            </div>
-            <div class='bg-gradient-to-br from-[#F9F9F7] to-white rounded-2xl p-4 text-center border border-gray-100 shadow-sm'>
+            </a>
+            <a href='/dashboard/my-posts/' class='bg-gradient-to-br from-[#F9F9F7] to-white rounded-2xl p-4 text-center border border-gray-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-300 block'>
                 <div class='text-2xl font-black text-[#062B57]'>{{ my_posts }}</div>
                 <div class='text-[10px] text-gray-500 uppercase tracking-wider font-semibold'>My Replies</div>
-            </div>
+            </a>
         </div>
         
         <!-- Quick Actions -->
         <div class='flex flex-wrap gap-2 mb-10'>
-            <a href='{% url 'dashboard:profile' %}' class='px-4 py-2 bg-[#062B57] text-white rounded-full font-semibold text-xs border-2 border-[#C8A24C] hover:bg-[#C8A24C] hover:text-[#062B57] transition-all shadow-md'>Edit Profile</a>
+           <!-- <a href='{% url 'dashboard:profile' %}' class='px-4 py-2 bg-[#062B57] text-white rounded-full font-semibold text-xs border-2 border-[#C8A24C] hover:bg-[#C8A24C] hover:text-[#062B57] transition-all shadow-md'>Edit Profile</a> -->
             <a href='{% url 'forum:home' %}' class='px-4 py-2 border-2 border-[#062B57]/20 text-[#062B57] rounded-full font-semibold text-xs hover:bg-[#062B57] hover:text-white transition-all'>Browse Forums</a>
             <a href='/articles/' class='px-4 py-2 border-2 border-[#062B57]/20 text-[#062B57] rounded-full font-semibold text-xs hover:bg-[#062B57] hover:text-white transition-all'>Read Articles</a>
             <a href='/events/' class='px-4 py-2 border-2 border-[#062B57]/20 text-[#062B57] rounded-full font-semibold text-xs hover:bg-[#062B57] hover:text-white transition-all'>View Events</a>
-            <a href='{% url 'account_logout' %}' class='px-4 py-2 border-2 border-red-200 text-red-500 rounded-full font-semibold text-xs hover:bg-red-50 transition-all'>Logout</a>
+            <!-- <a href='{% url 'account_logout' %}' class='px-4 py-2 border-2 border-red-200 text-red-500 rounded-full font-semibold text-xs hover:bg-red-50 transition-all'>Logout</a> -->
         </div>
         
         <!-- Three Column Layout -->

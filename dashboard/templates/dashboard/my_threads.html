@@ -1,13 +1,50 @@
-﻿{% extends 'base.html' %}{% block title %}My Threads — NEF{% endblock %}
+﻿{% extends 'base.html' %}
+{% block title %}Threads — NEF{% endblock %}
 {% block content %}
-<section class='min-h-screen pt-24 pb-16 bg-white'><div class='max-w-4xl mx-auto px-4'>
-<h1 class='text-3xl font-extrabold text-[#062B57] mb-8' style='font-family: Montserrat, sans-serif;'>My Threads</h1>
-{% if threads %}
-<div class='space-y-3'>{% for thread in threads %}
-<a href='{% url 'forum:thread' thread.slug %}' class='block bg-[#F9F9F7] rounded-2xl p-5 border border-gray-100 hover:shadow-md'>
-<h3 class='text-[#062B57] font-bold'>{{ thread.title }}</h3>
-<p class='text-gray-400 text-xs mt-1'>{{ thread.category.name }} &bull; {{ thread.created_at|date:'M d, Y' }} &bull; {{ thread.reply_count }} repl{{ thread.reply_count|pluralize:'y,ies' }}</p>
-</a>{% endfor %}</div>
-{% else %}<p class='text-gray-500 text-center py-16'>No threads yet. <a href='/forum/' class='text-[#C8A24C] font-semibold'>Start one!</a></p>{% endif %}
-</div></section>
+
+<section class='relative pt-24 pb-16 bg-[#062B57] overflow-hidden'>
+    <div class='relative max-w-4xl mx-auto px-4 text-center'>
+        <span class='inline-block text-[#C8A24C] font-semibold text-xs uppercase tracking-[0.2em] bg-[#C8A24C]/10 px-3 py-1 rounded-full mb-4'>Community</span>
+        <h1 class='text-4xl font-extrabold text-white mb-2' style='font-family: Montserrat, sans-serif;'>Threads</h1>
+        <div class='w-20 h-0.5 bg-gradient-to-r from-transparent via-[#C8A24C] to-transparent mx-auto'></div>
+    </div>
+</section>
+
+<section class='py-12 bg-white'>
+    <div class='max-w-4xl mx-auto px-4'>
+        
+        {% if my_threads %}
+        <h2 class='text-lg font-extrabold text-[#062B57] mb-4'>My Threads</h2>
+        <div class='space-y-3 mb-10'>
+            {% for thread in my_threads %}
+            <a href='{% url 'forum:thread' thread.slug %}' class='block bg-[#F9F9F7] rounded-2xl p-5 border border-gray-100 hover:shadow-md group'>
+                <div class='flex items-center justify-between'>
+                    <h3 class='text-[#062B57] font-bold group-hover:text-[#C8A24C] transition-colors'>{{ thread.title }}</h3>
+                    <span class='text-xs text-gray-400'>{{ thread.reply_count }} repl{{ thread.reply_count|pluralize:'y,ies' }}</span>
+                </div>
+                <p class='text-gray-400 text-xs mt-1'>{{ thread.category.name }} &bull; {{ thread.created_at|date:'M d, Y' }}</p>
+            </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <h2 class='text-lg font-extrabold text-[#062B57] mb-4'>All Threads</h2>
+        {% if all_threads %}
+        <div class='space-y-3'>
+            {% for thread in all_threads %}
+            <a href='{% url 'forum:thread' thread.slug %}' class='block bg-[#F9F9F7] rounded-2xl p-5 border border-gray-100 hover:shadow-md group'>
+                <div class='flex items-center justify-between'>
+                    <h3 class='text-[#062B57] font-bold group-hover:text-[#C8A24C] transition-colors'>{{ thread.title }}</h3>
+                    <span class='text-xs text-gray-400'>{{ thread.author.username }}</span>
+                </div>
+                <p class='text-gray-400 text-xs mt-1'>{{ thread.category.name }} &bull; {{ thread.created_at|date:'M d, Y' }} &bull; {{ thread.reply_count }} repl{{ thread.reply_count|pluralize:'y,ies' }}</p>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class='text-gray-500 text-center py-8'>No threads yet.</p>
+        {% endif %}
+    </div>
+</section>
+
 {% endblock %}

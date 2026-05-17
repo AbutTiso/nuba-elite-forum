@@ -1,0 +1,89 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Support NEF — Nuba Elite Forum{% endblock %}
+
+{% block content %}
+
+<section class='relative pt-24 pb-16 bg-[#062B57] overflow-hidden'>
+    <div class='absolute inset-0 opacity-[0.04]'>
+        <div class='absolute inset-0' style='background-image: radial-gradient(circle at 20px 20px, #C8A24C 1px, transparent 0); background-size: 40px 40px;'></div>
+    </div>
+    <div class='relative max-w-4xl mx-auto px-4 text-center'>
+        <span class='inline-block text-[#C8A24C] font-semibold text-xs uppercase tracking-[0.2em] bg-[#C8A24C]/10 px-3 py-1 rounded-full mb-4'>Support</span>
+        <h1 class='text-4xl md:text-5xl font-extrabold text-white mb-4' style='font-family: Montserrat, sans-serif;'>Support Our Mission</h1>
+        <div class='w-20 h-0.5 bg-gradient-to-r from-transparent via-[#C8A24C] to-transparent mx-auto'></div>
+        <p class='text-white/60 mt-4 max-w-xl mx-auto'>Your contribution helps us unite, empower, and build a better future for the Nuba community.</p>
+    </div>
+</section>
+
+<section class='py-16 lg:py-24 bg-white'>
+    <div class='max-w-4xl mx-auto px-4'>
+        
+        <div class='text-center mb-12'>
+            <h2 class='text-2xl font-extrabold text-[#062B57] mb-4' style='font-family: Montserrat, sans-serif;'>Why Donate?</h2>
+            <p class='text-gray-500 max-w-2xl mx-auto'>Nuba Elite Forum is a community-driven platform. Your support helps us maintain and grow our programs, events, and advocacy efforts.</p>
+        </div>
+        
+        <!-- Impact Cards -->
+        <div class='grid md:grid-cols-3 gap-6 mb-12'>
+            <div class='bg-[#F9F9F7] rounded-2xl p-6 text-center border border-gray-100'>
+                <div class='w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center mx-auto mb-4'>
+                    <svg class='w-6 h-6 text-blue-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253'/></svg>
+                </div>
+                <h3 class='text-[#062B57] font-bold mb-2'>Education</h3>
+                <p class='text-gray-500 text-sm'>Support leadership programs and educational initiatives for youth.</p>
+            </div>
+            <div class='bg-[#F9F9F7] rounded-2xl p-6 text-center border border-gray-100'>
+                <div class='w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center mx-auto mb-4'>
+                    <svg class='w-6 h-6 text-emerald-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z'/></svg>
+                </div>
+                <h3 class='text-[#062B57] font-bold mb-2'>Peacebuilding</h3>
+                <p class='text-gray-500 text-sm'>Fund dialogue forums and conflict resolution initiatives.</p>
+            </div>
+            <div class='bg-[#F9F9F7] rounded-2xl p-6 text-center border border-gray-100'>
+                <div class='w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center mx-auto mb-4'>
+                    <svg class='w-6 h-6 text-amber-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z'/></svg>
+                </div>
+                <h3 class='text-[#062B57] font-bold mb-2'>Community</h3>
+                <p class='text-gray-500 text-sm'>Help us connect professionals and change-makers across the Nuba community.</p>
+            </div>
+        </div>
+        
+        <!-- Donation Methods -->
+        <div class='grid md:grid-cols-2 gap-6'>
+            <div class='bg-gradient-to-br from-[#062B57] to-[#0A3D7A] text-white rounded-2xl p-8 text-center'>
+                <svg class='w-10 h-10 text-[#C8A24C] mx-auto mb-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z'/></svg>
+                <h3 class='text-xl font-extrabold mb-3' style='font-family: Montserrat, sans-serif;'>Bank Transfer</h3>
+                <p class='text-white/70 text-sm mb-4'>Make a direct contribution to support our programs.</p>
+                <div class='bg-white/10 rounded-xl p-4 text-left text-sm space-y-2'>
+                    <p><span class='text-[#C8A24C]'>Bank:</span> Coming Soon</p>
+                    <p><span class='text-[#C8A24C]'>Account:</span> Coming Soon</p>
+                    <p><span class='text-[#C8A24C]'>Reference:</span> NEF Donation</p>
+                </div>
+            </div>
+            
+            <div class='bg-gradient-to-br from-[#F9F9F7] to-white rounded-2xl p-8 text-center border border-gray-100'>
+                <svg class='w-10 h-10 text-[#C8A24C] mx-auto mb-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z'/></svg>
+                <h3 class='text-xl font-extrabold text-[#062B57] mb-3' style='font-family: Montserrat, sans-serif;'>Mobile Money</h3>
+                <p class='text-gray-500 text-sm mb-4'>Quick and easy contribution via mobile payment.</p>
+                <div class='bg-[#F9F9F7] rounded-xl p-4 text-left text-sm space-y-2'>
+                    <p><span class='text-[#C8A24C] font-semibold'>Coming Soon</span></p>
+                    <p class='text-gray-400'>Mobile money details will be available shortly.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contact for Donations -->
+        <div class='text-center mt-12 p-8 bg-[#F9F9F7] rounded-2xl border border-gray-100'>
+            <h3 class='text-lg font-extrabold text-[#062B57] mb-2' style='font-family: Montserrat, sans-serif;'>Want to Contribute?</h3>
+            <p class='text-gray-500 text-sm mb-4'>Reach out to us for partnership opportunities or larger contributions.</p>
+            <a href='/contact/' class='inline-flex items-center gap-2 px-6 py-3 bg-[#062B57] text-white font-bold rounded-full border-2 border-[#C8A24C] hover:bg-[#C8A24C] hover:text-[#062B57] transition-all text-sm'>
+                Contact Us
+                <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M17 8l4 4m0 0l-4 4m4-4H3'/></svg>
+            </a>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
