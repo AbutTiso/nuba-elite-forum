@@ -1,0 +1,120 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Search{% if query %}: {{ query }}{% endif %} — Nuba Elite Forum{% endblock %}
+
+{% block content %}
+
+<section class='relative pt-24 pb-16 bg-[#062B57] overflow-hidden'>
+    <div class='absolute inset-0 opacity-[0.04]'>
+        <div class='absolute inset-0' style='background-image: radial-gradient(circle at 20px 20px, #C8A24C 1px, transparent 0); background-size: 40px 40px;'></div>
+    </div>
+    <div class='relative max-w-4xl mx-auto px-4 text-center'>
+        <span class='inline-block text-[#C8A24C] font-semibold text-xs uppercase tracking-[0.2em] bg-[#C8A24C]/10 px-3 py-1 rounded-full mb-4'>Search</span>
+        <h1 class='text-4xl md:text-5xl font-extrabold text-white mb-4' style='font-family: Montserrat, sans-serif;'>
+            {% if query %}"{{ query }}"{% else %}Search{% endif %}
+        </h1>
+        <div class='w-20 h-0.5 bg-gradient-to-r from-transparent via-[#C8A24C] to-transparent mx-auto'></div>
+        
+        <!-- Search Form -->
+        <form action='/search/' method='get' class='mt-6 max-w-md mx-auto'>
+            <div class='relative'>
+                <input type='text' name='q' value='{{ query }}' placeholder='Search articles, forums, events...' class='w-full px-5 py-3 pl-12 rounded-full border-2 border-white/20 bg-white/10 text-white placeholder-white/40 focus:outline-none focus:border-[#C8A24C] focus:bg-white/20 transition-all text-sm'>
+                <svg class='w-5 h-5 text-white/50 absolute left-4 top-1/2 -translate-y-1/2' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/></svg>
+            </div>
+        </form>
+        
+        {% if query %}
+        <p class='text-white/40 text-sm mt-3'>{{ total }} result{{ total|pluralize }} found</p>
+        {% endif %}
+    </div>
+</section>
+
+<section class='py-16 bg-white'>
+    <div class='max-w-4xl mx-auto px-4'>
+        
+        {% if query %}
+            
+            {% if total == 0 %}
+            <div class='text-center py-16'>
+                <div class='w-16 h-16 bg-[#F9F9F7] rounded-2xl flex items-center justify-center mx-auto mb-4'>
+                    <svg class='w-8 h-8 text-[#062B57]/20' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/></svg>
+                </div>
+                <h2 class='text-xl font-bold text-[#062B57] mb-2'>No Results Found</h2>
+                <p class='text-gray-500'>Try a different search term.</p>
+            </div>
+            {% endif %}
+            
+            <!-- Articles -->
+            {% if results.articles %}
+            <div class='mb-12'>
+                <h2 class='text-lg font-extrabold text-[#062B57] mb-4' style='font-family: Montserrat, sans-serif;'>
+                    Articles ({{ results.articles|length }})
+                </h2>
+                <div class='space-y-3'>
+                    {% for article in results.articles %}
+                    <a href='/articles/{{ article.slug }}/' class='block bg-[#F9F9F7] rounded-2xl p-5 border border-gray-100 hover:shadow-md transition-all group'>
+                        <div class='flex items-center gap-2 mb-1'>
+                            <span class='text-[#C8A24C] text-xs font-semibold'>{{ article.category.name }}</span>
+                        </div>
+                        <h3 class='text-[#062B57] font-bold group-hover:text-[#C8A24C] transition-colors'>{{ article.title }}</h3>
+                        <p class='text-gray-400 text-xs mt-1'>{{ article.published_at|date:'M d, Y' }}</p>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Forum Threads -->
+            {% if results.threads %}
+            <div class='mb-12'>
+                <h2 class='text-lg font-extrabold text-[#062B57] mb-4' style='font-family: Montserrat, sans-serif;'>
+                    Discussions ({{ results.threads|length }})
+                </h2>
+                <div class='space-y-3'>
+                    {% for thread in results.threads %}
+                    <a href='/forum/thread/{{ thread.slug }}/' class='block bg-[#F9F9F7] rounded-2xl p-5 border border-gray-100 hover:shadow-md transition-all group'>
+                        <div class='flex items-center gap-2 mb-1'>
+                            <span class='text-[#C8A24C] text-xs'>{{ thread.category.icon }} {{ thread.category.name }}</span>
+                        </div>
+                        <h3 class='text-[#062B57] font-bold group-hover:text-[#C8A24C] transition-colors'>{{ thread.title }}</h3>
+                        <p class='text-gray-400 text-xs mt-1'>{{ thread.author.username }} &bull; {{ thread.created_at|date:'M d, Y' }} &bull; {{ thread.reply_count }} repl{{ thread.reply_count|pluralize:'y,ies' }}</p>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Events -->
+            {% if results.events %}
+            <div class='mb-12'>
+                <h2 class='text-lg font-extrabold text-[#062B57] mb-4' style='font-family: Montserrat, sans-serif;'>
+                    Events ({{ results.events|length }})
+                </h2>
+                <div class='space-y-3'>
+                    {% for event in results.events %}
+                    <a href='/events/' class='block bg-[#F9F9F7] rounded-2xl p-5 border border-gray-100 hover:shadow-md transition-all group'>
+                        <div class='flex items-center gap-2 mb-1'>
+                            <span class='text-[#C8A24C] text-xs font-semibold'>{{ event.get_event_type_display }}</span>
+                        </div>
+                        <h3 class='text-[#062B57] font-bold group-hover:text-[#C8A24C] transition-colors'>{{ event.title }}</h3>
+                        <p class='text-gray-400 text-xs mt-1'>{{ event.event_date|date:'M d, Y' }} &bull; {{ event.venue }}</p>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            
+        {% else %}
+            <div class='text-center py-16'>
+                <div class='w-16 h-16 bg-[#F9F9F7] rounded-2xl flex items-center justify-center mx-auto mb-4'>
+                    <svg class='w-8 h-8 text-[#062B57]/20' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/></svg>
+                </div>
+                <h2 class='text-xl font-bold text-[#062B57] mb-2'>Search NEF</h2>
+                <p class='text-gray-500'>Search across articles, discussions, and events.</p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

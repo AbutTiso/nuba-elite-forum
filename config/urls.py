@@ -12,6 +12,10 @@ urlpatterns = [
     path('leadership/', include('leadership.urls')),
     path('contact/', include('contact.urls')),
     path('gallery/', include('gallery.urls')),
+    path('accounts/', include('allauth.urls')),
+    path('dashboard/', include('dashboard.urls')),
+    path('forum/', include('forum.urls')),
+    path('messages/', include('messages_app.urls')),
 ]
 
 if settings.DEBUG:

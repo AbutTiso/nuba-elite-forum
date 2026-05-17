@@ -1,0 +1,13 @@
+﻿{% extends 'base.html' %}{% block title %}My Threads — NEF{% endblock %}
+{% block content %}
+<section class='min-h-screen pt-24 pb-16 bg-white'><div class='max-w-4xl mx-auto px-4'>
+<h1 class='text-3xl font-extrabold text-[#062B57] mb-8' style='font-family: Montserrat, sans-serif;'>My Threads</h1>
+{% if threads %}
+<div class='space-y-3'>{% for thread in threads %}
+<a href='{% url 'forum:thread' thread.slug %}' class='block bg-[#F9F9F7] rounded-2xl p-5 border border-gray-100 hover:shadow-md'>
+<h3 class='text-[#062B57] font-bold'>{{ thread.title }}</h3>
+<p class='text-gray-400 text-xs mt-1'>{{ thread.category.name }} &bull; {{ thread.created_at|date:'M d, Y' }} &bull; {{ thread.reply_count }} repl{{ thread.reply_count|pluralize:'y,ies' }}</p>
+</a>{% endfor %}</div>
+{% else %}<p class='text-gray-500 text-center py-16'>No threads yet. <a href='/forum/' class='text-[#C8A24C] font-semibold'>Start one!</a></p>{% endif %}
+</div></section>
+{% endblock %}

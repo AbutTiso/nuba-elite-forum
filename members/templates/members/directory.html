@@ -1,0 +1,64 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Member Directory — Nuba Elite Forum{% endblock %}
+
+{% block content %}
+
+<section class='relative pt-24 pb-16 bg-[#062B57] overflow-hidden'>
+    <div class='absolute inset-0 opacity-[0.04]'>
+        <div class='absolute inset-0' style='background-image: radial-gradient(circle at 20px 20px, #C8A24C 1px, transparent 0); background-size: 40px 40px;'></div>
+    </div>
+    <div class='relative max-w-4xl mx-auto px-4 text-center'>
+        <span class='inline-block text-[#C8A24C] font-semibold text-xs uppercase tracking-[0.2em] bg-[#C8A24C]/10 px-3 py-1 rounded-full mb-4'>Community</span>
+        <h1 class='text-4xl md:text-5xl font-extrabold text-white mb-4' style='font-family: Montserrat, sans-serif;'>Member Directory</h1>
+        <div class='w-20 h-0.5 bg-gradient-to-r from-transparent via-[#C8A24C] to-transparent mx-auto'></div>
+        <p class='text-white/60 mt-4'>{{ total }} member{{ total|pluralize }} in the NEF community</p>
+    </div>
+</section>
+
+<section class='py-16 bg-white'>
+    <div class='max-w-6xl mx-auto px-4'>
+        
+        {% if members %}
+        <div class='grid sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+            {% for member in members %}
+            <div class='bg-gradient-to-br from-[#F9F9F7] to-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-all'>
+                <div class='flex items-center gap-4 mb-4'>
+                    <div class='w-12 h-12 bg-gradient-to-br from-[#062B57] to-[#0A3D7A] rounded-full flex items-center justify-center flex-shrink-0 shadow-md'>
+                        <span class='text-[#C8A24C] font-bold text-lg'>{{ member.full_name.0|default:member.user.username.0|upper }}</span>
+                    </div>
+                    <div>
+                        <h3 class='text-[#062B57] font-bold'>{{ member.full_name|default:member.user.username }}</h3>
+                        {% if member.profession %}<p class='text-gray-400 text-xs'>{{ member.profession }}</p>{% endif %}
+                    </div>
+                </div>
+                {% if member.country or member.city %}
+                <p class='text-gray-500 text-xs mb-2'>
+                    <svg class='w-3.5 h-3.5 inline mr-1 text-[#C8A24C]' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z'/><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 11a3 3 0 11-6 0 3 3 0 016 0z'/></svg>
+                    {{ member.city }}{% if member.city and member.country %}, {% endif %}{{ member.country }}
+                </p>
+                {% endif %}
+                {% if member.interest_areas %}
+                <div class='flex flex-wrap gap-1 mt-3'>
+                    {% for interest in member.interest_areas|slice:':3' %}
+                    <span class='text-[10px] bg-[#C8A24C]/10 text-[#C8A24C] px-2 py-0.5 rounded-full'>{{ interest }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class='text-center py-20'>
+            <div class='w-20 h-20 bg-[#F9F9F7] rounded-2xl flex items-center justify-center mx-auto mb-6'>
+                <svg class='w-10 h-10 text-[#062B57]/20' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z'/></svg>
+            </div>
+            <h2 class='text-2xl font-bold text-[#062B57] mb-2'>No Members Yet</h2>
+            <p class='text-gray-500'>Members will appear here once they join.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}

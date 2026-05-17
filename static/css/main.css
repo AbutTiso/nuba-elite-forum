@@ -540,3 +540,95 @@ html[dir="rtl"] svg.group-hover\:translate-x-1 { transform: translateX(-0.25rem)
 .dark .prose h4 {
     color: #F1F5F9 !important;
 }
+
+
+/* ============ INSTITUTIONAL STYLING ============ */
+body {
+    overflow-x: hidden;
+}
+
+.section-padding {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+}
+
+.container-custom {
+    max-width: 1280px;
+    margin: auto;
+}
+
+.gold-gradient {
+    background: linear-gradient(135deg, #C8A24C 0%, #D9B866 100%);
+}
+
+.gold-gradient-text {
+    background: linear-gradient(135deg, #C8A24C 0%, #D4AF37 50%, #E8C547 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.navy-gradient {
+    background: linear-gradient(135deg, #062B57 0%, #0A3D7A 50%, #041D3D 100%);
+}
+
+.navy-gradient-text {
+    background: linear-gradient(135deg, #062B57 0%, #0A3A73 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Premium card */
+.card-premium {
+    background: white;
+    border: 1px solid rgba(6,43,87,0.06);
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.card-premium:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 60px rgba(6,43,87,0.12);
+    border-color: rgba(200,162,76,0.3);
+}
+
+/* Institutional divider */
+.divider-gold {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(to right, #C8A24C, transparent);
+    border-radius: 2px;
+}
+.divider-gold-center {
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(to right, transparent, #C8A24C, transparent);
+    border-radius: 2px;
+    margin: 0 auto;
+}
+
+/* Section tag */
+.tag-institutional {
+    display: inline-block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: #C8A24C;
+    background: rgba(200,162,76,0.08);
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 1rem;
+}
+
+/* Smooth reveal animation */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}

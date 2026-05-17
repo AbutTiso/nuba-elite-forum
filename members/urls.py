@@ -6,4 +6,5 @@ app_name = 'members'
 urlpatterns = [
     path('join/', views.join, name='join'),
     path('join/success/', views.join_success, name='join_success'),
+    path('directory/', views.member_directory, name='directory'),
 ]

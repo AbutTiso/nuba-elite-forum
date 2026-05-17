@@ -3,6 +3,7 @@ from django.conf import settings
 from django.utils import translation
 from articles.models import Article
 from events.models import Event
+from .search_views import search
 
 def home(request):
     lang = request.GET.get('lang')

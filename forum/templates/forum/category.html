@@ -1,0 +1,81 @@
+﻿{% extends 'base.html' %}
+{% block title %}{{ category.name }} — Nuba Elite Forum{% endblock %}
+
+{% block content %}
+
+<section class='relative pt-24 pb-16 bg-[#062B57] overflow-hidden'>
+    <div class='absolute inset-0 opacity-[0.04]'>
+        <div class='absolute inset-0' style='background-image: radial-gradient(circle at 20px 20px, #C8A24C 1px, transparent 0); background-size: 40px 40px;'></div>
+    </div>
+    <div class='relative max-w-4xl mx-auto px-4 text-center'>
+        <div class='w-16 h-16 bg-gradient-to-br from-[#062B57] to-[#0A3D7A] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg'>
+            <span class='text-3xl'>{{ category.icon }}</span>
+        </div>
+        <h1 class='text-4xl md:text-5xl font-extrabold text-white mb-3' style='font-family: Montserrat, sans-serif;'>{{ category.name }}</h1>
+        <div class='w-20 h-0.5 bg-gradient-to-r from-transparent via-[#C8A24C] to-transparent mx-auto mb-3'></div>
+        <p class='text-white/60 max-w-xl mx-auto'>{{ category.description }}</p>
+    </div>
+</section>
+
+<section class='py-16 bg-white'>
+    <div class='max-w-4xl mx-auto px-4'>
+        
+        {% if user.is_authenticated %}
+        <a href='{% url 'forum:create_thread' category.slug %}' class='group inline-flex items-center gap-2 px-6 py-3 bg-[#062B57] text-white font-bold rounded-full border-2 border-[#C8A24C] hover:bg-[#C8A24C] hover:text-[#062B57] transition-all duration-300 shadow-md hover:shadow-lg mb-8'>
+            <svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M12 5v14m-7-7h14'/></svg>
+            New Thread
+        </a>
+        {% else %}
+        <div class='bg-gradient-to-br from-[#F9F9F7] to-white rounded-2xl p-6 text-center mb-8 border border-gray-100'>
+            <p class='text-gray-500 mb-2'>Log in to start a discussion.</p>
+            <a href='/accounts/login/' class='text-[#C8A24C] font-semibold hover:text-[#062B57] transition-colors'>Login &rarr;</a>
+        </div>
+        {% endif %}
+        
+        {% if threads %}
+        <div class='space-y-3'>
+            {% for thread in threads %}
+            <a href='{% url 'forum:thread' thread.slug %}' class='block bg-[#F9F9F7] rounded-2xl p-5 border border-gray-100 hover:shadow-md hover:border-[#C8A24C]/30 transition-all duration-300 group'>
+                <div class='flex items-start gap-4'>
+                    <div class='w-10 h-10 bg-gradient-to-br from-[#062B57] to-[#0A3D7A] rounded-full flex items-center justify-center flex-shrink-0 shadow-sm'>
+                        <span class='text-[#C8A24C] font-bold text-sm'>{{ thread.author.username.0|upper }}</span>
+                    </div>
+                    <div class='flex-1 min-w-0'>
+                        <div class='flex items-center gap-2 mb-0.5'>
+                            {% if thread.is_pinned %}<span class='text-[#C8A24C]'>📌</span>{% endif %}
+                            {% if thread.is_closed %}<span class='text-red-400'>🔒</span>{% endif %}
+                            <h3 class='text-[#062B57] font-bold group-hover:text-[#C8A24C] transition-colors'>{{ thread.title }}</h3>
+                        </div>
+                        {% if thread.tags %}
+                        <div class='flex flex-wrap gap-1 mt-1 mb-1'>
+                            {% for tag in thread.tags.split|slice:':3' %}
+                            <span class='text-[10px] text-[#C8A24C] bg-[#C8A24C]/5 px-1.5 py-0.5 rounded-full'>#{{ tag }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        <p class='text-gray-400 text-xs'>{{ thread.author.username }} &bull; {{ thread.created_at|date:'M d, Y' }} &bull; {{ thread.reply_count }} repl{{ thread.reply_count|pluralize:'y,ies' }} &bull; {{ thread.views }} view{{ thread.views|pluralize }}</p>
+                    </div>
+                    <svg class='w-4 h-4 text-[#C8A24C] group-hover:translate-x-1 transition-transform flex-shrink-0 mt-1' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                        <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M9 5l7 7-7 7'/>
+                    </svg>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class='text-center py-16'>
+            <div class='w-16 h-16 bg-[#F9F9F7] rounded-2xl flex items-center justify-center mx-auto mb-4'>
+                <svg class='w-8 h-8 text-[#062B57]/20' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z'/></svg>
+            </div>
+            <p class='text-gray-500'>No threads yet. Start the conversation!</p>
+        </div>
+        {% endif %}
+        
+        <a href='{% url 'forum:home' %}' class='inline-flex items-center gap-2 mt-8 text-[#062B57] font-semibold hover:text-[#C8A24C] transition-colors text-sm'>
+            <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M10 19l-7-7m0 0l7-7m-7 7h18'/></svg>
+            Back to All Forums
+        </a>
+    </div>
+</section>
+
+{% endblock %}

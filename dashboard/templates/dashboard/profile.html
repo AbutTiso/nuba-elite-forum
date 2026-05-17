@@ -1,0 +1,108 @@
+﻿{% extends 'base.html' %}
+{% block title %}My Profile — Nuba Elite Forum{% endblock %}
+
+{% block content %}
+
+<section class='relative pt-24 pb-12 bg-[#062B57] overflow-hidden'>
+    <div class='absolute inset-0 opacity-[0.04]'>
+        <div class='absolute inset-0' style='background-image: radial-gradient(circle at 20px 20px, #C8A24C 1px, transparent 0); background-size: 40px 40px;'></div>
+    </div>
+    <div class='relative max-w-4xl mx-auto px-4 text-center'>
+        <div class='w-16 h-16 bg-gradient-to-br from-[#C8A24C] to-[#D4AF37] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg'>
+            <span class='text-[#062B57] font-extrabold text-2xl'>{{ user.username.0|upper }}</span>
+        </div>
+        <h1 class='text-4xl font-extrabold text-white mb-2' style='font-family: Montserrat, sans-serif;'>Edit Profile</h1>
+        <div class='w-20 h-0.5 bg-gradient-to-r from-transparent via-[#C8A24C] to-transparent mx-auto'></div>
+    </div>
+</section>
+
+<section class='py-12 bg-white'>
+    <div class='max-w-3xl mx-auto px-4'>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class='bg-green-50 border border-green-200 text-green-700 px-6 py-4 rounded-xl mb-6 text-center text-sm'>{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        
+        <form method='post' class='bg-gradient-to-br from-[#F9F9F7] to-white rounded-2xl p-8 border border-gray-100 shadow-sm'>
+            {% csrf_token %}
+            
+            <!-- Account Details -->
+            <div class='border-b border-gray-200 pb-6 mb-6'>
+                <h3 class='text-[#C8A24C] font-semibold text-xs uppercase tracking-[0.2em] mb-4'>Account</h3>
+                <div class='grid md:grid-cols-2 gap-4'>
+                    <div>
+                        <label class='block text-sm font-semibold text-[#062B57] mb-2'>Username</label>
+                        <input type='text' value='{{ user.username }}' disabled class='w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-gray-500 text-sm'>
+                    </div>
+                    <div>
+                        <label class='block text-sm font-semibold text-[#062B57] mb-2'>Email</label>
+                        <input type='email' name='email' value='{{ user.email }}' class='w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 text-sm transition-all'>
+                    </div>
+                    <div>
+                        <label class='block text-sm font-semibold text-[#062B57] mb-2'>First Name</label>
+                        <input type='text' name='first_name' value='{{ user.first_name }}' class='w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 text-sm transition-all'>
+                    </div>
+                    <div>
+                        <label class='block text-sm font-semibold text-[#062B57] mb-2'>Last Name</label>
+                        <input type='text' name='last_name' value='{{ user.last_name }}' class='w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 text-sm transition-all'>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Personal Information -->
+            <div class='border-b border-gray-200 pb-6 mb-6'>
+                <h3 class='text-[#C8A24C] font-semibold text-xs uppercase tracking-[0.2em] mb-4'>Personal Information</h3>
+                <div class='grid md:grid-cols-2 gap-4'>
+                    <div>
+                        <label class='block text-sm font-semibold text-[#062B57] mb-2'>Full Name</label>
+                        <input type='text' name='full_name' value='{% if member %}{{ member.full_name }}{% endif %}' class='w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 text-sm transition-all'>
+                    </div>
+                    <div>
+                        <label class='block text-sm font-semibold text-[#062B57] mb-2'>Phone</label>
+                        <input type='text' name='phone' value='{% if member %}{{ member.phone }}{% endif %}' class='w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 text-sm transition-all'>
+                    </div>
+                    <div>
+                        <label class='block text-sm font-semibold text-[#062B57] mb-2'>Country</label>
+                        <input type='text' name='country' value='{% if member %}{{ member.country }}{% endif %}' class='w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 text-sm transition-all'>
+                    </div>
+                    <div>
+                        <label class='block text-sm font-semibold text-[#062B57] mb-2'>City</label>
+                        <input type='text' name='city' value='{% if member %}{{ member.city }}{% endif %}' class='w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 text-sm transition-all'>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Professional -->
+            <div class='border-b border-gray-200 pb-6 mb-6'>
+                <h3 class='text-[#C8A24C] font-semibold text-xs uppercase tracking-[0.2em] mb-4'>Professional</h3>
+                <div class='grid md:grid-cols-2 gap-4'>
+                    <div>
+                        <label class='block text-sm font-semibold text-[#062B57] mb-2'>Profession</label>
+                        <input type='text' name='profession' value='{% if member %}{{ member.profession }}{% endif %}' class='w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 text-sm transition-all'>
+                    </div>
+                    <div>
+                        <label class='block text-sm font-semibold text-[#062B57] mb-2'>Organization</label>
+                        <input type='text' name='organization' value='{% if member %}{{ member.organization }}{% endif %}' class='w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 text-sm transition-all'>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Bio -->
+            <div class='pb-4'>
+                <h3 class='text-[#C8A24C] font-semibold text-xs uppercase tracking-[0.2em] mb-4'>About You</h3>
+                <div>
+                    <label class='block text-sm font-semibold text-[#062B57] mb-2'>Bio</label>
+                    <textarea name='bio' rows='3' class='w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 resize-none text-sm transition-all'>{% if member %}{{ member.bio }}{% endif %}</textarea>
+                </div>
+            </div>
+            
+            <button type='submit' class='w-full mt-6 py-3 bg-[#062B57] text-white font-bold rounded-full border-2 border-[#C8A24C] hover:bg-[#C8A24C] hover:text-[#062B57] transition-all duration-300 shadow-md hover:shadow-lg'>
+                Save Changes
+            </button>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

@@ -23,3 +23,14 @@ def join_success(request):
         'page_title': 'Application Submitted',
     }
     return render(request, 'members/join_success.html', context)
+
+def member_directory(request):
+    members = Member.objects.filter(is_approved=True).order_by('full_name')
+    total = members.count()
+    
+    context = {
+        'members': members,
+        'total': total,
+        'page_title': 'Member Directory',
+    }
+    return render(request, 'members/directory.html', context)

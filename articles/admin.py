@@ -52,3 +52,11 @@ class ArticleAdmin(admin.ModelAdmin):
         updated = queryset.update(featured=False)
         self.message_user(request, f'{updated} article(s) unmarked as featured.')
     unmark_featured.short_description = 'Remove featured status'
+
+
+from .models import Article, Category, Comment
+
+@admin.register(Comment)
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ['article', 'author', 'created_at']
+    search_fields = ['content', 'author__username']

@@ -3,71 +3,170 @@
     <div class='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <div class='flex justify-between items-center h-16 md:h-20'>
             
-            <div class='flex-shrink-0'>
-                <a href='/' class='flex items-center space-x-3'>
-                    <div class='w-10 h-10 bg-[#062B57] rounded-xl flex items-center justify-center shadow-lg'>
-                        <span class='text-[#C8A24C] font-extrabold text-lg'>NEF</span>
+            <div class='flex items-center gap-4'>
+                <button onclick='toggleSidebar()' class='p-2 rounded-lg hover:bg-[#062B57]/5 transition-colors text-[#062B57]' title='Menu'>
+                    <svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                        <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 6h16M4 12h16M4 18h16'/>
+                    </svg>
+                </button>
+                
+                <a href='/' class='flex items-center gap-3'>
+                    <img src='{% static 'images/logo/nef-logo.png' %}' 
+                         alt='Nuba Elite Forum Logo'
+                         class='h-10 md:h-12 w-auto object-contain'
+                         onerror='this.style.display=\"none\"; this.nextElementSibling.style.display=\"flex\";'>
+                    <div class='w-9 h-9 bg-[#062B57] rounded-xl items-center justify-center shadow-lg hidden' style='display:none;'>
+                        <span class='text-[#C8A24C] font-extrabold text-base'>NEF</span>
                     </div>
                     <div class='hidden md:block'>
-                        <div class='text-[#062B57] font-bold text-sm leading-tight'>NUBA ELITE</div>
-                        <div class='text-[#C8A24C] text-[10px] font-semibold tracking-[0.2em]'>FORUM</div>
+                        <div class='text-[#062B57] font-extrabold text-xs leading-tight tracking-tight' style='font-family: Montserrat, sans-serif;'>NUBA ELITE FORUM</div>
+                        <div class='text-[#C8A24C] text-[9px] font-semibold tracking-[0.2em]'>UNITY &bull; EQUALITY &bull; PROGRESS</div>
                     </div>
                 </a>
             </div>
             
-            <div class='hidden lg:flex lg:items-center lg:space-x-1'>
-                <a href='/' class='text-[#062B57] hover:text-[#C8A24C] font-medium transition-colors px-3 py-2 text-sm rounded-lg hover:bg-[#062B57]/5'>Home</a>
-                <a href='/about/' class='text-[#062B57] hover:text-[#C8A24C] font-medium transition-colors px-3 py-2 text-sm rounded-lg hover:bg-[#062B57]/5'>About</a>
-                <a href='/focus-areas/' class='text-[#062B57] hover:text-[#C8A24C] font-medium transition-colors px-3 py-2 text-sm rounded-lg hover:bg-[#062B57]/5'>Focus Areas</a>
-                <a href='/articles/' class='text-[#062B57] hover:text-[#C8A24C] font-medium transition-colors px-3 py-2 text-sm rounded-lg hover:bg-[#062B57]/5'>Insights</a>
-                <a href='/events/' class='text-[#062B57] hover:text-[#C8A24C] font-medium transition-colors px-3 py-2 text-sm rounded-lg hover:bg-[#062B57]/5'>Events</a>
-                <a href='/gallery/' class='text-[#062B57] hover:text-[#C8A24C] font-medium transition-colors px-3 py-2 text-sm rounded-lg hover:bg-[#062B57]/5'>Gallery</a>
-                <a href='/contact/' class='text-[#062B57] hover:text-[#C8A24C] font-medium transition-colors px-3 py-2 text-sm rounded-lg hover:bg-[#062B57]/5'>Contact</a>
+            <div class='flex items-center gap-1'>
                 
-                <button onclick='toggleDarkMode()' class='p-2 rounded-lg hover:bg-[#062B57]/5 transition-colors' title='Toggle dark mode'>
+                <form action='/search/' method='get' class='hidden md:flex items-center mr-1'>
+                    <div class='relative'>
+                        <input type='text' name='q' placeholder='Search...' class='w-28 lg:w-40 px-3 py-1.5 pl-8 border border-gray-200 rounded-lg text-xs focus:outline-none focus:border-[#C8A24C] transition-colors'>
+                        <svg class='w-3.5 h-3.5 text-gray-400 absolute left-2.5 top-1/2 -translate-y-1/2' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/>
+                        </svg>
+                    </div>
+                </form>
+                
+                {% if user.is_authenticated %}
+                    <div class='relative'>
+                        <button onclick='toggleUserDropdown()' class='flex items-center gap-1.5 px-2 py-1.5 rounded-lg hover:bg-[#062B57]/5 transition-colors text-sm font-semibold text-[#062B57]'>
+                            <div class='w-7 h-7 bg-[#062B57] rounded-full flex items-center justify-center'>
+                                <span class='text-[#C8A24C] font-bold text-xs'>{{ user.username.0|upper }}</span>
+                            </div>
+                            <span class='hidden sm:inline'>{{ user.username }}</span>
+                            <svg id='user-chevron' class='w-3 h-3 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'/>
+                            </svg>
+                        </button>
+                        <div id='user-dropdown' class='absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50 hidden'>
+                            <a href='/dashboard/' class='flex items-center gap-3 px-4 py-2.5 text-sm text-[#062B57] hover:bg-[#062B57]/5 transition-colors font-medium'>
+                                <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'/></svg>
+                                Dashboard
+                            </a>
+                            <a href='/messages/' class='flex items-center gap-3 px-4 py-2.5 text-sm text-[#062B57] hover:bg-[#062B57]/5 transition-colors font-medium'>
+                                <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'/></svg>
+                                Messages
+                            </a>
+                            <a href='/dashboard/profile/' class='flex items-center gap-3 px-4 py-2.5 text-sm text-[#062B57] hover:bg-[#062B57]/5 transition-colors font-medium'>
+                                <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.066 2.573c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.573 1.066c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.066-2.573c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z'/><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'/></svg>
+                                Settings
+                            </a>
+                            <div class='border-t border-gray-100 my-1'></div>
+                            <a href='/accounts/logout/' class='flex items-center gap-3 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 transition-colors font-medium'>
+                                <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1'/></svg>
+                                Sign Out
+                            </a>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class='relative'>
+                        <button onclick='toggleUserDropdown()' class='flex items-center gap-1 px-3 py-1.5 rounded-lg hover:bg-[#062B57]/5 transition-colors text-sm font-semibold text-[#062B57]'>
+                            <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'/>
+                            </svg>
+                            <span class='hidden sm:inline'>Account</span>
+                            <svg id='user-chevron' class='w-3 h-3 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'/>
+                            </svg>
+                        </button>
+                        <div id='user-dropdown' class='absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50 hidden'>
+                            <a href='/accounts/login/' class='flex items-center gap-3 px-4 py-2.5 text-sm text-[#062B57] hover:bg-[#062B57]/5 transition-colors font-medium'>
+                                <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1'/></svg>
+                                Sign In
+                            </a>
+                            <a href='/accounts/signup/' class='flex items-center gap-3 px-4 py-2.5 text-sm bg-[#C8A24C]/10 text-[#062B57] hover:bg-[#C8A24C] hover:text-[#062B57] transition-colors font-bold'>
+                                <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z'/></svg>
+                                Join NEF
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <button onclick='toggleDarkMode()' class='p-2 rounded-lg hover:bg-[#062B57]/5 transition-colors' title='Dark mode'>
                     <svg id='dark-icon' class='w-4 h-4 text-[#062B57]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                         <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z'/>
                     </svg>
                 </button>
                 
-               <!-- <div class='flex items-center gap-0.5 ml-1 border-l border-gray-200 pl-3'>
-                    <a href='/?lang=en' class='text-[10px] px-2 py-1 rounded-full font-bold transition-colors bg-[#062B57] text-white' id='lang-en'>EN</a>
-                    <a href='/?lang=ar' class='text-[10px] px-2 py-1 rounded-full font-bold transition-colors text-[#062B57] hover:bg-[#062B57]/5' id='lang-ar'>عربي</a>
-                </div>-->
-                
-                <a href='/members/join/' class='ml-2 bg-[#062B57] text-white px-5 py-2 rounded-full font-semibold text-sm border-2 border-[#C8A24C] hover:bg-[#C8A24C] hover:text-[#062B57] transition-all duration-300 shadow-md hover:shadow-lg'>
-                    Join NEF
-                </a>
+                <div class='relative'>
+                    <button onclick='toggleLangDropdown()' class='flex items-center gap-1 px-2 py-1.5 rounded-lg hover:bg-[#062B57]/5 transition-colors text-xs font-semibold text-[#062B57]'>
+                        <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z'/>
+                        </svg>
+                        <span class='hidden sm:inline'>EN</span>
+                        <svg id='lang-chevron' class='w-3 h-3 transition-transform' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M19 9l-7 7-7-7'/>
+                        </svg>
+                    </button>
+                    <div id='lang-dropdown' class='absolute right-0 mt-2 w-36 bg-white rounded-xl shadow-xl border border-gray-100 py-1 z-50 hidden'>
+                        <a href='/?lang=en' class='flex items-center gap-3 px-4 py-2.5 text-sm text-[#062B57] hover:bg-[#062B57]/5 transition-colors font-medium'>🇬🇧 English</a>
+                        <a href='/?lang=ar' class='flex items-center gap-3 px-4 py-2.5 text-sm text-[#062B57] hover:bg-[#062B57]/5 transition-colors font-medium'>🇸🇩 العربية</a>
+                    </div>
+                </div>
             </div>
-            
-            <div class='lg:hidden'>
-                <button onclick='toggleMobileMenu()' class='text-[#062B57] p-2 hover:bg-[#062B57]/5 rounded-lg transition-colors'>
-                    <svg class='h-6 w-6' fill='none' viewBox='0 0 24 24' stroke='currentColor'>
-                        <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 6h16M4 12h16M4 18h16'/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-        
-        <div id='mobile-menu' class='hidden lg:hidden border-t border-gray-100 py-2'>
-            <a href='/' class='block text-[#062B57] hover:text-[#C8A24C] hover:bg-[#062B57]/5 font-medium py-3 px-4 rounded-lg transition-colors'>Home</a>
-            <a href='/about/' class='block text-[#062B57] hover:text-[#C8A24C] hover:bg-[#062B57]/5 font-medium py-3 px-4 rounded-lg transition-colors'>About</a>
-            <a href='/focus-areas/' class='block text-[#062B57] hover:text-[#C8A24C] hover:bg-[#062B57]/5 font-medium py-3 px-4 rounded-lg transition-colors'>Focus Areas</a>
-            <a href='/articles/' class='block text-[#062B57] hover:text-[#C8A24C] hover:bg-[#062B57]/5 font-medium py-3 px-4 rounded-lg transition-colors'>Insights</a>
-            <a href='/events/' class='block text-[#062B57] hover:text-[#C8A24C] hover:bg-[#062B57]/5 font-medium py-3 px-4 rounded-lg transition-colors'>Events</a>
-            <a href='/gallery/' class='block text-[#062B57] hover:text-[#C8A24C] hover:bg-[#062B57]/5 font-medium py-3 px-4 rounded-lg transition-colors'>Gallery</a>
-            <a href='/contact/' class='block text-[#062B57] hover:text-[#C8A24C] hover:bg-[#062B57]/5 font-medium py-3 px-4 rounded-lg transition-colors'>Contact</a>
-            
-            <div class='flex items-center gap-2 px-4 py-3'>
-                <button onclick='toggleDarkMode()' class='text-sm text-[#062B57] font-medium'>Dark Mode</button>
-                <span class='text-gray-300'>|</span>
-                <a href='/?lang=en' class='text-xs px-3 py-1 rounded-full font-bold bg-[#062B57] text-white'>EN</a>
-                <a href='/?lang=ar' class='text-xs px-3 py-1 rounded-full font-bold text-[#062B57] border border-[#062B57]/20'>عربي</a>
-            </div>
-            
-            <a href='/members/join/' class='block mx-4 mt-2 text-center bg-[#062B57] text-white px-6 py-3 rounded-full font-semibold border-2 border-[#C8A24C] hover:bg-[#C8A24C] hover:text-[#062B57] transition-all'>
-                Join NEF
-            </a>
         </div>
     </div>
 </nav>
+
+<div id='sidebar-overlay' class='fixed inset-0 bg-black/50 z-40 hidden' onclick='toggleSidebar()'></div>
+
+<div id='sidebar' class='fixed top-0 left-0 h-full w-72 bg-white z-50 transform -translate-x-full transition-transform duration-300 shadow-2xl overflow-y-auto'>
+    
+    <div class='p-6 border-b border-gray-100 flex items-center justify-between'>
+        <div class='flex items-center gap-3'>
+            <img src='{% static 'images/logo/nef-logo.png' %}' alt='NEF' class='h-8 w-auto'>
+            <span class='text-[#062B57] font-extrabold text-sm' style='font-family: Montserrat, sans-serif;'>NEF</span>
+        </div>
+        <button onclick='toggleSidebar()' class='p-1.5 rounded-lg hover:bg-gray-100 transition-colors text-gray-400'>
+            <svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 18L18 6M6 6l12 12'/></svg>
+        </button>
+    </div>
+    
+    <div class='px-4 pt-4 md:hidden'>
+        <form action='/search/' method='get'>
+            <div class='relative'>
+                <input type='text' name='q' placeholder='Search...' class='w-full px-4 py-2.5 pl-10 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-[#C8A24C]'>
+                <svg class='w-4 h-4 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'/></svg>
+            </div>
+        </form>
+    </div>
+    
+    <div class='p-4 space-y-1'>
+        <a href='/' class='flex items-center gap-3 px-4 py-3 rounded-xl text-[#062B57] font-medium hover:bg-[#062B57]/5 transition-colors'><svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'/></svg>Home</a>
+        <a href='/about/' class='flex items-center gap-3 px-4 py-3 rounded-xl text-[#062B57] font-medium hover:bg-[#062B57]/5 transition-colors'><svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'/></svg>About NEF</a>
+        <a href='/focus-areas/' class='flex items-center gap-3 px-4 py-3 rounded-xl text-[#062B57] font-medium hover:bg-[#062B57]/5 transition-colors'><svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z'/></svg>Focus Areas</a>
+        <a href='/articles/' class='flex items-center gap-3 px-4 py-3 rounded-xl text-[#062B57] font-medium hover:bg-[#062B57]/5 transition-colors'><svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z'/></svg>Insights</a>
+        <a href='/events/' class='flex items-center gap-3 px-4 py-3 rounded-xl text-[#062B57] font-medium hover:bg-[#062B57]/5 transition-colors'><svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z'/></svg>Events</a>
+        <a href='/forum/' class='flex items-center gap-3 px-4 py-3 rounded-xl text-[#C8A24C] font-semibold bg-[#C8A24C]/5 hover:bg-[#C8A24C]/10 transition-colors'><svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z'/></svg>Forums</a>
+        <a href='/messages/' class='flex items-center gap-3 px-4 py-3 rounded-xl text-[#062B57] font-medium hover:bg-[#062B57]/5 transition-colors'><svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'/></svg>Messages</a>
+        <a href='/members/directory/' class='flex items-center gap-3 px-4 py-3 rounded-xl text-[#062B57] font-medium hover:bg-[#062B57]/5 transition-colors'><svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z'/></svg>Members</a>
+        <a href='/gallery/' class='flex items-center gap-3 px-4 py-3 rounded-xl text-[#062B57] font-medium hover:bg-[#062B57]/5 transition-colors'><svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'/></svg>Gallery</a>
+        <a href='/contact/' class='flex items-center gap-3 px-4 py-3 rounded-xl text-[#062B57] font-medium hover:bg-[#062B57]/5 transition-colors'><svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z'/></svg>Contact</a>
+    </div>
+    
+    <div class='p-4 border-t border-gray-100 mt-4'>
+        {% if user.is_authenticated %}
+            <a href='/dashboard/' class='flex items-center gap-3 px-4 py-3 rounded-xl text-[#062B57] font-medium hover:bg-[#062B57]/5 transition-colors'><svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'/></svg>{{ user.username }}</a>
+            <a href='/accounts/logout/' class='flex items-center gap-3 px-4 py-3 rounded-xl text-red-500 font-medium hover:bg-red-50 transition-colors mt-1'><svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1'/></svg>Logout</a>
+        {% else %}
+            <a href='/accounts/login/' class='flex items-center gap-3 px-4 py-3 rounded-xl text-[#062B57] font-medium hover:bg-[#062B57]/5 transition-colors'><svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1'/></svg>Sign In</a>
+            <a href='/accounts/signup/' class='flex items-center gap-3 px-4 py-3 rounded-xl bg-[#C8A24C] text-[#062B57] font-bold mt-1 hover:bg-[#062B57] hover:text-white transition-all'><svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z'/></svg>Join NEF</a>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+function toggleLangDropdown(){var d=document.getElementById('lang-dropdown');var c=document.getElementById('lang-chevron');d.classList.toggle('hidden');c.classList.toggle('rotate-180');}
+function toggleUserDropdown(){var d=document.getElementById('user-dropdown');var c=document.getElementById('user-chevron');d.classList.toggle('hidden');if(c)c.classList.toggle('rotate-180');}
+document.addEventListener('click',function(e){var langD=document.getElementById('lang-dropdown');var userD=document.getElementById('user-dropdown');var langB=e.target.closest('button[onclick=\"toggleLangDropdown()\"]');var userB=e.target.closest('button[onclick=\"toggleUserDropdown()\"]');if(!langB&&langD&&!langD.classList.contains('hidden')){langD.classList.add('hidden');document.getElementById('lang-chevron').classList.remove('rotate-180');}if(!userB&&userD&&!userD.classList.contains('hidden')){userD.classList.add('hidden');var uc=document.getElementById('user-chevron');if(uc)uc.classList.remove('rotate-180');}});
+function toggleSidebar(){var sidebar=document.getElementById('sidebar');var overlay=document.getElementById('sidebar-overlay');sidebar.classList.toggle('-translate-x-full');overlay.classList.toggle('hidden');}
+</script>

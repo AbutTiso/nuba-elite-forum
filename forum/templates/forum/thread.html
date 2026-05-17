@@ -1,0 +1,162 @@
+﻿{% extends 'base.html' %}
+{% block title %}{{ thread.title }} — Nuba Elite Forum{% endblock %}
+
+{% block content %}
+
+<section class='relative pt-24 pb-12 bg-[#062B57] overflow-hidden'>
+    <div class='absolute inset-0 opacity-[0.04]'>
+        <div class='absolute inset-0' style='background-image: radial-gradient(circle at 20px 20px, #C8A24C 1px, transparent 0); background-size: 40px 40px;'></div>
+    </div>
+    <div class='relative max-w-4xl mx-auto px-4'>
+        <div class='flex items-center gap-2 text-[#C8A24C]/60 text-xs mb-4'>
+            <a href='{% url 'forum:home' %}' class='hover:text-[#C8A24C] transition-colors'>Forums</a>
+            <span>/</span>
+            <a href='{% url 'forum:category' thread.category.slug %}' class='hover:text-[#C8A24C] transition-colors'>{{ thread.category.name }}</a>
+        </div>
+        <h1 class='text-3xl md:text-4xl font-extrabold text-white mb-3' style='font-family: Montserrat, sans-serif;'>{{ thread.title }}</h1>
+        
+        {% if thread.tags %}
+        <div class='flex flex-wrap gap-1 mb-3'>
+            {% for tag in thread.tags.split %}
+            <a href='/search/?q={{ tag }}' class='text-[10px] bg-white/10 text-white/70 px-2 py-0.5 rounded-full hover:bg-[#C8A24C]/30 transition-colors'>#{{ tag }}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <div class='flex items-center gap-3 text-white/60 text-sm'>
+            <div class='w-8 h-8 bg-[#C8A24C] rounded-full flex items-center justify-center text-[#062B57] font-bold text-xs'>{{ thread.author.username.0|upper }}</div>
+            <span>{{ thread.author.username }}</span>
+            <span>&bull;</span>
+            <span>{{ thread.created_at|date:'F d, Y' }}</span>
+            <span>&bull;</span>
+            <span>{{ thread.views }} view{{ thread.views|pluralize }}</span>
+            {% if thread.is_pinned %}<span class='text-[#C8A24C]'>📌 Pinned</span>{% endif %}
+            {% if thread.is_closed %}<span class='text-red-400'>🔒 Closed</span>{% endif %}
+        </div>
+    </div>
+</section>
+
+<section class='py-12 bg-white'>
+    <div class='max-w-4xl mx-auto px-4'>
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class='bg-green-50 border border-green-200 text-green-700 px-6 py-4 rounded-xl mb-6 text-center text-sm'>{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        
+        <div class='bg-gradient-to-br from-[#F9F9F7] to-white rounded-2xl p-6 mb-6 border border-gray-100 shadow-sm'>
+            <div class='flex items-center gap-3 mb-4 pb-4 border-b border-gray-100'>
+                <div class='w-12 h-12 bg-gradient-to-br from-[#062B57] to-[#0A3D7A] rounded-full flex items-center justify-center shadow-md'>
+                    <span class='text-[#C8A24C] font-bold text-lg'>{{ thread.author.username.0|upper }}</span>
+                </div>
+                <div>
+                    <p class='text-[#062B57] font-semibold'>{{ thread.author.username }}</p>
+                    <p class='text-gray-400 text-xs'>{{ thread.created_at|date:'F d, Y - H:i' }}</p>
+                </div>
+            </div>
+            <div class='text-gray-600 leading-relaxed text-[15px]'>{{ thread.content|linebreaks }}</div>
+            
+            <div class='mt-4 pt-4 border-t border-gray-100 flex items-center gap-4'>
+                {% if user.is_authenticated %}
+                <button class='like-thread-btn flex items-center gap-1.5 text-sm text-gray-400 hover:text-[#C8A24C] transition-colors' data-slug='{{ thread.slug }}'>
+                    <svg class='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'/></svg>
+                    <span class='like-count'>{{ thread.likes.count }}</span> like{{ thread.likes.count|pluralize }}
+                </button>
+                {% if thread.author != user %}
+                <a href='/messages/new/{{ thread.author.username }}/' class='text-sm text-[#C8A24C] hover:text-[#062B57] transition-colors'>Message</a>
+                {% endif %}
+                {% else %}
+                <span class='text-sm text-gray-400'>{{ thread.likes.count }} like{{ thread.likes.count|pluralize }}</span>
+                {% endif %}
+            </div>
+        </div>
+        
+        {% if posts %}
+        <h3 class='text-lg font-extrabold text-[#062B57] mb-4' style='font-family: Montserrat, sans-serif;'>
+            {{ thread.reply_count }} Repl{{ thread.reply_count|pluralize:'y,ies' }}
+        </h3>
+        <div class='space-y-3 mb-8'>
+            {% for post in posts %}
+            <div class='bg-[#F9F9F7] rounded-2xl p-5 border border-gray-100 hover:shadow-sm transition-shadow'>
+                <div class='flex items-center gap-3 mb-3'>
+                    <div class='w-9 h-9 bg-gradient-to-br from-[#062B57] to-[#0A3D7A] rounded-full flex items-center justify-center shadow-sm'>
+                        <span class='text-[#C8A24C] font-bold text-xs'>{{ post.author.username.0|upper }}</span>
+                    </div>
+                    <div>
+                        <p class='text-[#062B57] font-semibold text-sm'>
+                            {{ post.author.username }}
+                            {% if user.is_authenticated and post.author != user %}
+                            <a href='/messages/new/{{ post.author.username }}/' class='text-[10px] text-[#C8A24C] hover:text-[#062B57] ml-2'>Message</a>
+                            {% endif %}
+                        </p>
+                        <p class='text-gray-400 text-xs'>{{ post.created_at|date:'M d, Y - H:i' }}{% if post.is_edited %} <span class='text-[#C8A24C]'>(edited)</span>{% endif %}</p>
+                    </div>
+                </div>
+                <div class='text-gray-600 text-sm leading-relaxed pl-12'>{{ post.content|linebreaks }}</div>
+                
+                <div class='pl-12 mt-2'>
+                    {% if user.is_authenticated %}
+                    <button class='like-post-btn flex items-center gap-1 text-xs text-gray-400 hover:text-[#C8A24C] transition-colors' data-post-id='{{ post.id }}'>
+                        <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z'/></svg>
+                        <span class='like-count'>{{ post.likes.count }}</span>
+                    </button>
+                    {% else %}
+                    <span class='text-xs text-gray-400'>{{ post.likes.count }} like{{ post.likes.count|pluralize }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% if user.is_authenticated and not thread.is_closed %}
+        <div class='bg-gradient-to-br from-[#F9F9F7] to-white rounded-2xl p-6 border border-gray-100 shadow-sm'>
+            <h3 class='text-[#062B57] font-bold mb-3'>Post a Reply</h3>
+            <form method='post'>
+                {% csrf_token %}
+                <textarea name='content' rows='4' placeholder='Share your thoughts...' class='w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:border-[#C8A24C] focus:ring-2 focus:ring-[#C8A24C]/10 resize-none text-sm transition-all' required></textarea>
+                <button type='submit' class='mt-3 px-6 py-2.5 bg-[#062B57] text-white font-bold rounded-full border-2 border-[#C8A24C] hover:bg-[#C8A24C] hover:text-[#062B57] transition-all duration-300 text-sm shadow-md hover:shadow-lg'>
+                    Post Reply
+                </button>
+            </form>
+        </div>
+        {% elif thread.is_closed %}
+        <div class='bg-red-50 rounded-2xl p-6 text-center border border-red-100'>
+            <p class='text-red-600 font-medium'>🔒 This thread is closed for new replies.</p>
+        </div>
+        {% else %}
+        <div class='bg-gradient-to-br from-[#F9F9F7] to-white rounded-2xl p-6 text-center border border-gray-100'>
+            <p class='text-gray-500 mb-3'>Please log in to join the discussion.</p>
+            <a href='/accounts/login/' class='inline-flex items-center gap-2 text-[#C8A24C] font-semibold hover:text-[#062B57] transition-colors'>
+                Login to Reply
+                <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M17 8l4 4m0 0l-4 4m4-4H3'/></svg>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<script>
+document.querySelectorAll('.like-thread-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        var slug = this.getAttribute('data-slug');
+        var countSpan = this.querySelector('.like-count');
+        fetch('/forum/thread/' + slug + '/like/')
+            .then(function(r) { return r.json(); })
+            .then(function(data) { countSpan.textContent = data.count; });
+    });
+});
+
+document.querySelectorAll('.like-post-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+        var postId = this.getAttribute('data-post-id');
+        var countSpan = this.querySelector('.like-count');
+        fetch('/forum/post/' + postId + '/like/')
+            .then(function(r) { return r.json(); })
+            .then(function(data) { countSpan.textContent = data.count; });
+    });
+});
+</script>
+
+{% endblock %}

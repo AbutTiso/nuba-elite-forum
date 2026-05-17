@@ -1,0 +1,14 @@
+﻿{% extends 'base.html' %}{% block title %}My Posts — NEF{% endblock %}
+{% block content %}
+<section class='min-h-screen pt-24 pb-16 bg-white'><div class='max-w-4xl mx-auto px-4'>
+<h1 class='text-3xl font-extrabold text-[#062B57] mb-8' style='font-family: Montserrat, sans-serif;'>My Replies</h1>
+{% if posts %}
+<div class='space-y-3'>{% for post in posts %}
+<a href='{% url 'forum:thread' post.thread.slug %}' class='block bg-[#F9F9F7] rounded-2xl p-5 border border-gray-100 hover:shadow-md'>
+<p class='text-[#062B57] font-bold text-sm'>Re: {{ post.thread.title }}</p>
+<p class='text-gray-500 text-xs mt-1'>{{ post.content|truncatechars:100 }}</p>
+<p class='text-gray-400 text-xs mt-1'>{{ post.created_at|date:'M d, Y' }}</p>
+</a>{% endfor %}</div>
+{% else %}<p class='text-gray-500 text-center py-16'>No replies yet.</p>{% endif %}
+</div></section>
+{% endblock %}

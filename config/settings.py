@@ -21,7 +21,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'django.contrib.sites',
+   
+
     # NEF Custom Apps
     'core',
     'articles',
@@ -30,6 +35,9 @@ INSTALLED_APPS = [
     'leadership',
     'contact',
     'gallery',
+    'dashboard',
+    'forum',
+    'messages_app', 
 ]
 
 MIDDLEWARE = [
@@ -42,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+     'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -115,3 +124,26 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Sites framework (required by allauth)
+SITE_ID = 1
+
+# Django Allauth
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/'
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_USERNAME_REQUIRED = True
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = False
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_LOGOUT_ON_GET = True
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+
+# Email backend for development (prints to console instead of sending)
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

@@ -1,0 +1,115 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Discussion Forums — Nuba Elite Forum{% endblock %}
+
+{% block content %}
+
+<section class='relative pt-24 pb-16 bg-[#062B57] overflow-hidden'>
+    <div class='absolute inset-0 opacity-[0.04]'>
+        <div class='absolute inset-0' style='background-image: radial-gradient(circle at 20px 20px, #C8A24C 1px, transparent 0); background-size: 40px 40px;'></div>
+    </div>
+    <div class='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#C8A24C]/5 rounded-full blur-3xl'></div>
+    <div class='relative max-w-4xl mx-auto px-4 text-center'>
+        <span class='inline-block text-[#C8A24C] font-semibold text-xs uppercase tracking-[0.2em] bg-[#C8A24C]/10 px-3 py-1 rounded-full mb-4'>Community</span>
+        <h1 class='text-4xl md:text-5xl font-extrabold text-white mb-4' style='font-family: Montserrat, sans-serif;'>Discussion Forums</h1>
+        <div class='w-20 h-0.5 bg-gradient-to-r from-transparent via-[#C8A24C] to-transparent mx-auto'></div>
+        <p class='text-white/60 mt-4 max-w-xl mx-auto'>Engage with Nuba intellectuals, professionals, and change-makers.</p>
+        
+        {% if user.is_authenticated %}
+        <div class='mt-6'>
+            <p class='text-white/40 text-xs mb-3'>Choose a category below to start a new discussion</p>
+        </div>
+        {% else %}
+        <div class='mt-6'>
+            <a href='/accounts/login/' class='inline-flex items-center gap-2 px-6 py-3 bg-[#C8A24C] text-[#062B57] font-bold rounded-full hover:bg-white transition-all shadow-lg'>
+                <svg class='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M11 16l-4-4m0 0l4-4m-4 4h14'/></svg>
+                Sign In to Participate
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<section class='py-16 lg:py-24 bg-white'>
+    <div class='max-w-6xl mx-auto px-4'>
+        
+        {% if categories %}
+        <div class='grid md:grid-cols-2 gap-6'>
+            {% for category in categories %}
+            <div class='group bg-[#F9F9F7] rounded-2xl p-6 border border-gray-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300'>
+                <a href='{% url 'forum:category' category.slug %}' class='block'>
+                    <div class='flex items-start gap-4'>
+                        <div class='w-14 h-14 bg-gradient-to-br from-[#062B57] to-[#0A3D7A] rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg group-hover:from-[#C8A24C] group-hover:to-[#D4AF37] transition-all duration-500'>
+                            <span class='text-2xl'>{{ category.icon }}</span>
+                        </div>
+                        <div class='flex-1 min-w-0'>
+                            <h3 class='text-[#062B57] font-bold text-lg mb-1 group-hover:text-[#C8A24C] transition-colors'>{{ category.name }}</h3>
+                            <p class='text-gray-500 text-sm mb-3 leading-relaxed'>{{ category.description|truncatewords:20 }}</p>
+                            <div class='flex items-center gap-4 text-xs text-gray-400'>
+                                <span class='flex items-center gap-1'>
+                                    <svg class='w-3.5 h-3.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z'/></svg>
+                                    {{ category.thread_count }} thread{{ category.thread_count|pluralize }}
+                                </span>
+                                {% if category.latest_thread %}
+                                <span class='truncate'>{{ category.latest_thread.title|truncatechars:30 }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <svg class='w-5 h-5 text-[#C8A24C] group-hover:translate-x-1 transition-transform flex-shrink-0 mt-3' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                            <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M9 5l7 7-7 7'/>
+                        </svg>
+                    </div>
+                </a>
+                {% if user.is_authenticated %}
+                <div class='mt-4 pt-4 border-t border-gray-200'>
+                    <a href='{% url 'forum:create_thread' category.slug %}' class='inline-flex items-center gap-1.5 text-[#062B57] text-xs font-semibold hover:text-[#C8A24C] transition-colors'>
+                        <svg class='w-3.5 h-3.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' d='M12 5v14m-7-7h14'/></svg>
+                        New thread in {{ category.name }}
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class='text-center py-20'>
+            <div class='w-20 h-20 bg-[#F9F9F7] rounded-2xl flex items-center justify-center mx-auto mb-6'>
+                <svg class='w-10 h-10 text-[#062B57]/20' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z'/></svg>
+            </div>
+            <h2 class='text-2xl font-bold text-[#062B57] mb-2'>No Forums Yet</h2>
+            <p class='text-gray-500'>Discussion categories coming soon.</p>
+        </div>
+        {% endif %}
+        
+        {% if recent_threads %}
+        <div class='mt-16'>
+            <div class='flex items-center justify-between mb-6'>
+                <h2 class='text-2xl font-extrabold text-[#062B57]' style='font-family: Montserrat, sans-serif;'>Recent Discussions</h2>
+                {% if user.is_authenticated %}
+                <span class='text-gray-400 text-xs'>Select a category above to post</span>
+                {% endif %}
+            </div>
+            <div class='bg-[#F9F9F7] rounded-2xl border border-gray-100 divide-y divide-gray-100 overflow-hidden'>
+                {% for thread in recent_threads %}
+                <a href='{% url 'forum:thread' thread.slug %}' class='flex items-center gap-4 p-5 hover:bg-white transition-colors group'>
+                    <div class='w-10 h-10 bg-gradient-to-br from-[#062B57] to-[#0A3D7A] rounded-full flex items-center justify-center flex-shrink-0 shadow-md'>
+                        <span class='text-[#C8A24C] font-bold text-sm'>{{ thread.author.username.0|upper }}</span>
+                    </div>
+                    <div class='flex-1 min-w-0'>
+                        <p class='text-[#062B57] font-semibold text-sm group-hover:text-[#C8A24C] transition-colors'>{{ thread.title }}</p>
+                        <p class='text-gray-400 text-xs mt-0.5'>{{ thread.author.username }} &bull; {{ thread.created_at|date:'M d, Y' }} &bull; {{ thread.reply_count }} repl{{ thread.reply_count|pluralize:'y,ies' }}</p>
+                    </div>
+                    <div class='flex items-center gap-1 text-gray-400 text-xs flex-shrink-0'>
+                        <svg class='w-3.5 h-3.5' fill='none' stroke='currentColor' viewBox='0 0 24 24'><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M15 12a3 3 0 11-6 0 3 3 0 016 0z'/><path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z'/></svg>
+                        {{ thread.views }}
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}
